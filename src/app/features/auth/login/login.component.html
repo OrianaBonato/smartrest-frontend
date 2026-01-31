@@ -1,0 +1,21 @@
+<div style="max-width: 360px; margin: 48px auto; display: grid; gap: 16px;">
+  <h2>SmartRest</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" style="display: grid; gap: 12px;">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Entrar</button>
+
+    <div *ngIf="error" style="color: #b00020;">
+      {{ error }}
+    </div>
+  </form>
+</div>
