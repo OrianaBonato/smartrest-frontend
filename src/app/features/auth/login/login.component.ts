@@ -12,14 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule
-  ],
-  templateUrl: './login.component.html'
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
   form: FormGroup;
@@ -28,11 +22,11 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
     });
   }
 
@@ -42,20 +36,32 @@ export class LoginComponent {
 
     const req: LoginRequest = {
       email: this.form.value.email,
-      password: this.form.value.password
+      password: this.form.value.password,
     };
 
     this.auth.login(req).subscribe({
       next: (res) => {
         const rol = (res.rol || '').toUpperCase();
-            console.log('LOGIN RES:', res);
-        if (rol === 'COCINA') this.router.navigateByUrl('/cocina');
-        else if (rol === 'BARRA') this.router.navigateByUrl('/barra');
-        else this.router.navigateByUrl('/sala');
+        this.router.navigateByUrl(this.homeByRol(rol));
       },
       error: (err) => {
         this.error = err?.error?.error ?? 'Login incorrecto';
-      }
+      },
     });
+  }
+
+  homeByRol(rol: string): string {
+    switch (rol) {
+      case 'SALA':
+        return '/sala';
+      case 'COCINA':
+        return '/cocina';
+      case 'BARRA':
+        return '/barra';
+      case 'ADMIN':
+        return '/admin';
+      default:
+        return '/login';
+    }
   }
 }

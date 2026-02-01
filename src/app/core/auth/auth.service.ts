@@ -17,17 +17,16 @@ export interface LoginResponse {
 const LS_KEY = 'smartrest_auth';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   constructor(private http: HttpClient) {}
 
   login(req: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`/api/auth/login`, req).pipe(
-      tap(res => {
+      tap((res) => {
         localStorage.setItem(LS_KEY, JSON.stringify(res));
-      })
+      }),
     );
   }
 
@@ -35,9 +34,12 @@ export class AuthService {
     localStorage.removeItem(LS_KEY);
   }
 
-  getAuth(): LoginResponse | null {
+  getAuth(): any | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
     const raw = localStorage.getItem(LS_KEY);
-    return raw ? JSON.parse(raw) as LoginResponse : null;
+    return raw ? JSON.parse(raw) : null;
   }
 
   getRol(): string | null {
