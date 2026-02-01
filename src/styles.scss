@@ -57,8 +57,8 @@ body {
 }
 
 .smartrest-logo-blanco {
-  width: 60px; 
-  height: 60px; 
+  width: 4rem;
+  height: 4rem;
   background-image: url('./assets/img/smartrest-marca-blanca-500x500px.png');
   background-repeat: no-repeat;
   background-position: center;
@@ -67,8 +67,8 @@ body {
 }
 
 .smartrest-logo-verde {
-  width: 12rem; /* ajusta */
-  height: 12rem; /* ajusta */
+  width: 16rem; 
+  height: 16rem; 
   background-image: url('./assets/img/smartrest-logo-verde-500x500px.png');
   background-repeat: no-repeat;
   background-position: center;
@@ -111,8 +111,7 @@ body {
 }
 
 .smartrest-toolbar {
-  position: absolute;
-  top: 0;
+  height: 8vh !important;
   background-color: #10432a !important;
   display: flex;
   flex-direction: row;
