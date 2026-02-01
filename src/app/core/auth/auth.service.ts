@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface LoginRequest {
   email: string;
@@ -20,18 +20,22 @@ const LS_KEY = 'smartrest_auth';
   providedIn: 'root',
 })
 export class AuthService {
+  private loggedInSubject = new BehaviorSubject<boolean>(this.hasAuthInStorage());
+  loggedIn$ = this.loggedInSubject.asObservable();
   constructor(private http: HttpClient) {}
 
   login(req: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`/api/auth/login`, req).pipe(
       tap((res) => {
         localStorage.setItem(LS_KEY, JSON.stringify(res));
+        this.loggedInSubject.next(true);
       }),
     );
   }
 
   logout(): void {
     localStorage.removeItem(LS_KEY);
+    this.loggedInSubject.next(false);
   }
 
   getAuth(): any | null {
@@ -48,5 +52,10 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getAuth();
+  }
+
+  private hasAuthInStorage(): boolean {
+    if (typeof window === 'undefined') return false;
+    return !!localStorage.getItem(LS_KEY);
   }
 }

@@ -1,21 +1,27 @@
-<div style="max-width: 360px; margin: 48px auto; display: grid; gap: 16px;">
-  <h2>SmartRest</h2>
+<div class="smartrest-fondo-background"></div>
+<div class="smartrest-fondo-png"></div>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" style="display: grid; gap: 12px;">
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" />
-    </mat-form-field>
+  <div class="smartrest-login-card-container">
+   
+   
+    <div class="smartrest-logo-verde" aria-label="Smartrest"></div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput type="password" formControlName="password" />
-    </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="submit()" style="display: grid; gap: 12px">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+      </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Entrar</button>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
 
-    <div *ngIf="error" style="color: #b00020;">
-      {{ error }}
-    </div>
-  </form>
-</div>
+      <button mat-raised-button color="primary" type="submit">Entrar</button>
+
+      <div *ngIf="error" style="color: #b00020">
+        {{ error }}
+      </div>
+    </form>
+  </div>
+

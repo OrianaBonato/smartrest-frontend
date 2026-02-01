@@ -1,4 +1,26 @@
+
+   _____                      _     _____           _   
+  / ____|                    | |   |  __ \         | |  
+ | (___  _ __ ___   __ _ _ __| |_  | |__) |___  ___| |_ 
+  \___ \| '_ ` _ \ / _` | '__| __| |  _  // _ \/ __| __|
+  ____) | | | | | | (_| | |  | |_  | | \ \  __/\__ \ |_ 
+ |_____/|_| |_| |_|\__,_|_|   \__| |_|  \_\___||___/\__|
+
 # SmartrestFrontend
+
+Aplicación web de gestión de restaurante – Proyecto Final DAW
+
+- Qué es SmartRest
+
+SmartRest es una aplicación web diseñada para llevar la gestión de un local de hostelería durante la jornada.
+
+- Qué problema resuelve
+
+SmartRest lleva el control de fichaje de los empleados (turnos, horarios, ausencias, etc) y la gestión del restaurante (reservas, cuentas, etc) en una misma aplicación. 
+
+App Colors:
+Primary color: #185638
+Secundary color: #10432a 
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.15.
 
@@ -6,6 +28,10 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 To start a local development server, run:
 
+```bash
+npm run start
+```
+or 
 ```bash
 ng serve
 ```
