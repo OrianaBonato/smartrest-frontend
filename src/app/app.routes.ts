@@ -9,6 +9,7 @@ import { AdminHomeComponent } from './features/admin/admin-home/admin-home.compo
 import { AuthGuard } from './core/guards/auth-guard';
 import { RoleGuard } from './core/guards/role-guard';
 import { AlreadyLoggedGuard } from './core/guards/already-logged-guard';
+import { SalaMesaDetalleComponent } from './features/sala/sala-mesa-detalle/sala-mesa-detalle.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AlreadyLoggedGuard] },
@@ -16,6 +17,12 @@ export const routes: Routes = [
   {
     path: 'sala',
     component: SalaHomeComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['SALA'] },
+  },
+  {
+    path: 'sala/mesa/:id',
+    component: SalaMesaDetalleComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['SALA'] },
   },

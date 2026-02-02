@@ -19,6 +19,7 @@
           background-color: #e1e3de;
         "
         [style.background-color]="mesa.estado === 'OCUPADA' ? '#b3cdba' : '#e1e3de'"
+        (click)="mesaOnClick(mesa)"
       >
         <div
           style="

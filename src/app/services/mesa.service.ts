@@ -19,4 +19,8 @@ export class MesaService {
   getMesas(): Observable<Mesa[]> {
     return this.http.get<Mesa[]>('/api/mesas/list');
   }
+
+  getMesa(idMesa: string): Observable<Mesa> {
+    return this.http.get<Mesa>(`/api/mesas/${idMesa}`);
+  }
 }

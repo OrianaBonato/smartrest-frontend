@@ -18,6 +18,7 @@ export class SalaMesasComponent implements OnInit {
   constructor(
     private mesaService: MesaService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -29,5 +30,10 @@ export class SalaMesasComponent implements OnInit {
       },
       error: (err) => console.error('Error cargando mesas', err),
     });
+  }
+
+  mesaOnClick(mesa: Mesa) {
+    console.log('Click mesa:', mesa);
+    this.router.navigate(['/sala/mesa/', mesa.idMesa]);
   }
 }
