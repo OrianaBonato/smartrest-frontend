@@ -1,3 +1,84 @@
-<h2>N: {{ mesa?.numero }}</h2>
-<p>C: {{ mesa?.capacidad }}</p>
-<b>E: {{ mesa?.estado }}</b>
+<div
+  style="
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+    margin: 0.4rem;
+    margin-bottom: 4rem;
+  "
+>
+  <h2>N: {{ mesa?.numero }}</h2>
+  <p>Capacidad: {{ mesa?.capacidad }}</p>
+  <b>Estado: {{ mesa?.estado }}</b>
+</div>
+
+<!-- FORM ABRIR SERVICIO -->
+@if (!servicioEstaAbierto) {
+  <form [formGroup]="formAbrir" (ngSubmit)="abrirServicio()" style="display: grid; gap: 12px">
+    <mat-form-field appearance="outline">
+      <mat-label>Nº comensales</mat-label>
+      <input matInput type="number" formControlName="numeroComensales" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Observaciones</mat-label>
+      <input matInput formControlName="observaciones" placeholder="Ej: sin gluten" />
+    </mat-form-field>
+  </form>
+  
+  <!-- BOTON EMPEZAR -->
+  <button
+    type="submit"
+    matButton="filled"
+    (click)="abrirServicio()"
+    [disabled]="this.formAbrir.invalid && loading"
+    style="margin: 0.4rem"
+  >
+    Empezar
+  </button>
+} @else {
+  <button matButton="filled" (click)="cerrarServicio()" style="margin: 0.4rem">Cerrar</button>
+}
+
+@if (mesa?.estado === 'OCUPADA') {
+  <div
+    style="
+      display: grid;
+      gap: 2rem;
+      justify-content: space-evenly;
+      grid-template-columns: repeat(auto-fit, 16rem);
+      width: 100vw;
+      margin: auto;
+    "
+  >
+    @for (producto of productos; track producto.idProducto) {
+      <button
+        matFab
+        extended
+        style="
+          padding: 4rem;
+          width: 16rem;
+          height: 4rem;
+          box-sizing: border-box;
+          background-color: #e1e3de;
+          font-size: xx-small;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            margin: auto 0;
+          "
+        >
+          <h2>{{ producto.nombre }}</h2>
+          <div>Precio: {{ producto.precio }}</div>
+        </div>
+      </button>
+    }
+  </div>
+}
