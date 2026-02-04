@@ -1,0 +1,44 @@
+.cards-resumen {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin: 12px 12px 24px;
+}
+
+.info-card {
+  padding: 8px 4px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #444;
+}
+
+.info-empty {
+  color: #666;
+  padding: 8px 0;
+}
+
+.form-servicio {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}

@@ -36,4 +36,8 @@ export class ServicioService {
     const req: CerrarServicioRequest = { idServicio };
     return this.http.post<ServicioResponse>('/api/servicios/cerrar', req);
   }
+
+  getServicioMesaByMesaId(idMesa: number): Observable<ServicioResponse> {
+    return this.http.get<ServicioResponse>(`/api/servicios/mesa/${idMesa}`);
+  }
 }

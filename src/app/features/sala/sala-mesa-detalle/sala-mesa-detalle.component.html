@@ -1,46 +1,80 @@
-<div
-  style="
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    gap: 0.1rem;
-    margin: 0.4rem;
-    margin-bottom: 4rem;
-  "
->
-  <h2>N: {{ mesa?.numero }}</h2>
-  <p>Capacidad: {{ mesa?.capacidad }}</p>
-  <b>Estado: {{ mesa?.estado }}</b>
-</div>
+<section class="cards-resumen">
+  <mat-card class="info-card">
+    <mat-card-title>Mesa</mat-card-title>
+    <mat-card-content>
+      <div class="info-row">
+        <span class="info-label">Número</span>
+        <span>{{ mesa?.numero }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Capacidad</span>
+        <span>{{ mesa?.capacidad }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Estado</span>
+        <span>{{ mesa?.estado }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-<!-- FORM ABRIR SERVICIO -->
-@if (!servicioEstaAbierto) {
-  <form [formGroup]="formAbrir" (ngSubmit)="abrirServicio()" style="display: grid; gap: 12px">
-    <mat-form-field appearance="outline">
-      <mat-label>Nº comensales</mat-label>
-      <input matInput type="number" formControlName="numeroComensales" />
-    </mat-form-field>
+  <mat-card class="info-card">
+    <mat-card-title>Servicio</mat-card-title>
+    <mat-card-content>
+      @if (servicioActual) {
+        <div class="info-row">
+          <span class="info-label">ID</span>
+          <span>{{ servicioActual.idServicio }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Estado</span>
+          <span>{{ servicioActual.estado }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Mesa</span>
+          <span>{{ servicioActual.numeroMesa }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Comensales</span>
+          <span>{{ servicioActual.numeroComensales }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Observaciones</span>
+          <span>{{ servicioActual.observaciones || 'Sin observaciones' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Inicio</span>
+          <span>{{ servicioActual.fechaInicio | date: 'short' }}</span>
+        </div>
+        <div class="card-actions">
+          <button matButton="filled" (click)="cerrarServicio()">Cerrar servicio</button>
+        </div>
+      } @else {
+        <div class="info-empty">Mesa libre. Puedes iniciar un servicio.</div>
+        <form class="form-servicio" [formGroup]="formAbrir" (ngSubmit)="abrirServicio()">
+          <mat-form-field appearance="outline">
+            <mat-label>Nº comensales</mat-label>
+            <input matInput type="number" formControlName="numeroComensales" />
+          </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Observaciones</mat-label>
-      <input matInput formControlName="observaciones" placeholder="Ej: sin gluten" />
-    </mat-form-field>
-  </form>
-  
-  <!-- BOTON EMPEZAR -->
-  <button
-    type="submit"
-    matButton="filled"
-    (click)="abrirServicio()"
-    [disabled]="this.formAbrir.invalid && loading"
-    style="margin: 0.4rem"
-  >
-    Empezar
-  </button>
-} @else {
-  <button matButton="filled" (click)="cerrarServicio()" style="margin: 0.4rem">Cerrar</button>
-}
+          <mat-form-field appearance="outline">
+            <mat-label>Observaciones</mat-label>
+            <input matInput formControlName="observaciones" placeholder="Ej: sin gluten" />
+          </mat-form-field>
+        </form>
+        <div class="card-actions">
+          <button
+            type="submit"
+            matButton="filled"
+            (click)="abrirServicio()"
+            [disabled]="this.formAbrir.invalid && loading"
+          >
+            Empezar servicio
+          </button>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</section>
 
 @if (mesa?.estado === 'OCUPADA') {
   <div
@@ -82,3 +116,4 @@
     }
   </div>
 }
+
