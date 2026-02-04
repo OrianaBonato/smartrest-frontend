@@ -1,0 +1,130 @@
+.cola-panel {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.cola-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cola-section {
+  display: grid;
+  gap: 10px;
+}
+
+.cola-section-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.cola-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cola-empty {
+  color: #666;
+  padding: 8px 0;
+}
+
+.cola-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.cola-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 190px;
+}
+
+.cola-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.mesa-label {
+  font-size: 0.95rem;
+}
+
+.mesa-num {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.estado-chip,
+.destino-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eee;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.fecha-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f2f2f2;
+  color: #555;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.estado-chip.is-pendiente {
+  background: #fff4cc;
+  color: #7a5d00;
+}
+
+.estado-chip.is-prep {
+  background: #e8f0fe;
+  color: #1a4e8a;
+}
+
+.estado-chip.is-listo {
+  background: #e5f4ea;
+  color: #1f6f43;
+}
+
+.destino-chip {
+  background: #f2f2f2;
+  color: #555;
+}
+
+.cola-obs {
+  margin-top: 8px;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.cola-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow: auto;
+}
+
+.listas-table {
+  width: 100%;
+  min-width: 520px;
+}
+
+.listas-table th,
+.listas-table td {
+  padding: 8px 12px;
+}

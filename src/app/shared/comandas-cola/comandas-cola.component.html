@@ -1,0 +1,124 @@
+﻿<section class="cola-panel">
+  <div class="cola-header">
+    <div class="cola-title">{{ titulo }}</div>
+    <button matButton="outlined" (click)="cargarCola()" [disabled]="cargando">
+      Actualizar
+    </button>
+  </div>
+
+  @if (lineas.length === 0) {
+    <div class="cola-empty">Sin comandas en cola</div>
+  } @else {
+    <div class="cola-section">
+      <div class="cola-section-title">Pendientes</div>
+      @if (pendientes.length === 0) {
+        <div class="cola-empty">Sin pendientes</div>
+      } @else {
+        <div class="cola-grid">
+          @for (linea of pendientes; track linea.idLinea) {
+            <mat-card class="cola-card">
+              <mat-card-header>
+                <mat-card-title>
+                  {{ linea.productoNombre || ('Producto #' + linea.idProducto) }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                  <span class="mesa-label">
+                    Mesa <span class="mesa-num">{{ linea.numeroMesa || linea.idMesa }}</span>
+                  </span>
+                  · {{ linea.cantidad }} uds
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="cola-meta">
+                  <span
+                    class="estado-chip"
+                    [class.is-pendiente]="linea.estado === 'PENDIENTE'"
+                    [class.is-prep]="linea.estado === 'EN_PREPARACION'"
+                  >
+                    {{ linea.estado }}
+                  </span>
+                  <span class="destino-chip">{{ linea.destino }}</span>
+                  <span class="fecha-chip">{{ linea.fechaCreacion | date: 'short' }}</span>
+                </div>
+                @if (linea.observaciones) {
+                  <div class="cola-obs">
+                    {{ linea.observaciones }}
+                  </div>
+                }
+              </mat-card-content>
+              <mat-card-actions class="cola-actions">
+                @if (linea.estado === 'PENDIENTE') {
+                  <button
+                    matButton="filled"
+                    color="primary"
+                    (click)="cambiarEstado(linea, 'EN_PREPARACION')"
+                  >
+                    Preparar
+                  </button>
+                  <button matButton="outlined" (click)="cancelarLinea(linea)">
+                    Cancelar
+                  </button>
+                } @else if (linea.estado === 'EN_PREPARACION') {
+                  <button
+                    matButton="filled"
+                    color="primary"
+                    (click)="cambiarEstado(linea, 'LISTO')"
+                  >
+                    Listo
+                  </button>
+                  <button matButton="outlined" (click)="cancelarLinea(linea)">
+                    Cancelar
+                  </button>
+                }
+              </mat-card-actions>
+            </mat-card>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="cola-section">
+      <div class="cola-section-title">Listas</div>
+      @if (listas.length === 0) {
+        <div class="cola-empty">Sin listas</div>
+      } @else {
+        <div class="table-wrap">
+          <table mat-table [dataSource]="listas" class="listas-table">
+            <ng-container matColumnDef="mesa">
+              <th mat-header-cell *matHeaderCellDef>Mesa</th>
+              <td mat-cell *matCellDef="let row"><span class="mesa-num">{{ row.numeroMesa || row.idMesa }}</span></td>
+            </ng-container>
+
+            <ng-container matColumnDef="producto">
+              <th mat-header-cell *matHeaderCellDef>Producto</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.productoNombre || ('Producto #' + row.idProducto) }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cantidad">
+              <th mat-header-cell *matHeaderCellDef>Cant.</th>
+              <td mat-cell *matCellDef="let row">{{ row.cantidad }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="destino">
+              <th mat-header-cell *matHeaderCellDef>Destino</th>
+              <td mat-cell *matCellDef="let row">{{ row.destino }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef>Fecha</th>
+              <td mat-cell *matCellDef="let row">{{ row.fechaCreacion | date: 'short' }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="listasCols"></tr>
+            <tr mat-row *matRowDef="let row; columns: listasCols"></tr>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</section>
+
+
+

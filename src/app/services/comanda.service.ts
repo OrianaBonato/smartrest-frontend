@@ -10,6 +10,8 @@ export interface CrearLineaRequest {
   idUsuarioCreador: number;
 }
 
+export type EstadoLinea = 'PENDIENTE' | 'EN_PREPARACION' | 'LISTO' | 'ENTREGADO' | 'CANCELADO';
+
 export interface LineaComandaResponse {
   idLinea: number;
   idServicio: number;
@@ -18,10 +20,12 @@ export interface LineaComandaResponse {
   cantidad: number;
   precioUnitario: number;
   destino: 'COCINA' | 'BARRA';
-  estado: string;
+  estado: EstadoLinea;
   observaciones?: string;
   fechaCreacion: string;
   fechaActualizacion?: string;
+  idMesa?: number;
+  numeroMesa?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -38,5 +42,14 @@ export class ComandaService {
 
   lineasByServicioId(idServicio: number): Observable<LineaComandaResponse[]> {
     return this.http.get<LineaComandaResponse[]>(`/api/servicios/${idServicio}/lineas`);
+  }
+
+  colaByDestino(destino: 'COCINA' | 'BARRA'): Observable<LineaComandaResponse[]> {
+    const path = destino === 'COCINA' ? 'cocina' : 'barra';
+    return this.http.get<LineaComandaResponse[]>(`/api/colas/${path}`);
+  }
+
+  cambiarEstadoLinea(idLinea: number, nuevoEstado: EstadoLinea): Observable<LineaComandaResponse> {
+    return this.http.patch<LineaComandaResponse>(`/api/lineas/${idLinea}/estado`, { nuevoEstado });
   }
 }
