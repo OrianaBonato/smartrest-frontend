@@ -5,6 +5,15 @@
   background: #f5f6f8;
 }
 
+.panel-top {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.back-btn {
+  gap: 6px;
+}
+
 .summary-card {
   padding: 4px 2px;
   background: #ffffff;

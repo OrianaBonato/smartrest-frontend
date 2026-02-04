@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { ComandaService, LineaComandaResponse } from '../../../services/comanda.service';
 
 @Component({
@@ -23,6 +24,7 @@ import { ComandaService, LineaComandaResponse } from '../../../services/comanda.
     MatInputModule,
     MatCardModule,
     MatIconModule,
+    RouterLink,
   ],
   standalone: true,
   templateUrl: './sala-mesa-detalle.component.html',
