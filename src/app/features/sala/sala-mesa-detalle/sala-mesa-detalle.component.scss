@@ -35,6 +35,23 @@
   font-size: 0.9rem;
 }
 
+.mesa-estado-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.estado-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+.mat-symbol {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+
 .summary-chip {
   padding: 6px 10px;
   border-radius: 999px;

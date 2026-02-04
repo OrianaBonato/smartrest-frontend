@@ -1,40 +1,26 @@
-<div style="padding: 4rem">
-  <div
-    style="
-      display: grid;
-      gap: 2rem;
-      justify-content: space-evenly;
-      grid-template-columns: repeat(auto-fit, 24rem);
-    "
-  >
+<section class="mesas-panel">
+  <div class="mesas-grid">
     @for (mesa of mesas; track mesa.idMesa) {
-      <button
-        matFab
-        extended
-        style="
-          padding: 4rem;
-          width: 20rem;
-          height: 20rem;
-          box-sizing: border-box;
-          background-color: #e1e3de;
-        "
-        [style.background-color]="mesa.estado === 'OCUPADA' ? '#b3cdba' : '#e1e3de'"
-        (click)="mesaOnClick(mesa)"
-      >
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin: auto 0;
-          "
-        >
-          <h2>Mesa: {{ mesa.numero }}</h2>
-          <div>Capacidad: {{ mesa.capacidad }}</div>
-          <div>Estado: {{ mesa.estado }}</div>
-        </div>
-      </button>
+      <mat-card class="mesa-card" [class.is-ocupada]="mesa.estado === 'OCUPADA'">
+        <mat-card-header>
+          <mat-card-title>Mesa {{ mesa.numero }}</mat-card-title>
+          <mat-card-subtitle>Capacidad {{ mesa.capacidad }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="mesa-estado">
+            <span class="estado-dot" [class.is-ocupada]="mesa.estado === 'OCUPADA'"></span>
+            <mat-icon class="estado-icon mat-symbol" fontSet="material-symbols-outlined">
+              {{ mesa.estado === 'OCUPADA' ? 'dine_in' : 'table_restaurant' }}
+            </mat-icon>
+            <span>{{ mesa.estado }}</span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" class="mesa-action" (click)="mesaOnClick(mesa)">
+            Entrar
+          </button>
+        </mat-card-actions>
+      </mat-card>
     }
   </div>
-</div>
+</section>

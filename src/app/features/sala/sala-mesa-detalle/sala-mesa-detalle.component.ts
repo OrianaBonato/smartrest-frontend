@@ -10,11 +10,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { ComandaService, LineaComandaResponse } from '../../../services/comanda.service';
 
 @Component({
   selector: 'smartrest-sala-mesa-detalle',
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatCardModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+    MatIconModule,
+  ],
   standalone: true,
   templateUrl: './sala-mesa-detalle.component.html',
   styleUrl: './sala-mesa-detalle.component.scss',

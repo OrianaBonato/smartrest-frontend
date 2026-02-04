@@ -6,7 +6,13 @@
         <div class="summary-title">
           <div class="mesa-title">Mesa {{ mesa?.numero }}</div>
           <div class="mesa-meta">
-            Capacidad {{ mesa?.capacidad }} · Estado {{ mesa?.estado }}
+            Capacidad {{ mesa?.capacidad }} ·
+            <span class="mesa-estado-inline">
+              <mat-icon class="estado-icon mat-symbol" fontSet="material-symbols-outlined">
+                {{ mesa?.estado === 'OCUPADA' ? 'dine_in' : 'table_restaurant' }}
+              </mat-icon>
+              {{ mesa?.estado }}
+            </span>
           </div>
         </div>
         <div class="summary-chip" [class.is-open]="servicioActual?.estado === 'ABIERTO'">
