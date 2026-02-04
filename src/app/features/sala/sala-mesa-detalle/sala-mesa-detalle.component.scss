@@ -1,34 +1,92 @@
-.cards-resumen {
+.panel {
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  margin: 12px 12px 24px;
+  padding: 12px;
+  background: #f5f6f8;
+}
+
+.summary-card {
+  padding: 4px 2px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.summary-title {
+  display: grid;
+  gap: 2px;
+}
+
+.mesa-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.mesa-meta {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.summary-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eee;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.summary-chip.is-open {
+  background: #e5f4ea;
+  color: #1f6f43;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-top: 12px;
+}
+
+.summary-item {
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.summary-wide {
+  grid-column: 1 / -1;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: #444;
+  font-size: 0.85rem;
 }
 
 .info-card {
   padding: 8px 4px;
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.info-row:last-child {
-  border-bottom: none;
-}
-
-.info-label {
-  font-weight: 600;
-  color: #444;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .info-empty {
   color: #666;
   padding: 8px 0;
+}
+
+.panel-note {
+  margin: 8px 0;
 }
 
 .form-servicio {
@@ -41,4 +99,194 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 12px;
+}
+
+.workspace {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "products"
+    "cart"
+    "pending"
+    "bill";
+}
+
+.products-card {
+  grid-area: products;
+}
+
+.cart-card {
+  grid-area: cart;
+}
+
+.pending-card {
+  grid-area: pending;
+}
+
+.bill-card {
+  grid-area: bill;
+  position: sticky;
+  top: 12px;
+  align-self: start;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+@media (min-width: 900px) {
+  .workspace {
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+      "products cart"
+      "products pending"
+      "products bill";
+  }
+
+  .bill-card {
+    max-height: 70vh;
+  }
+}
+
+.productos-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.producto-item-btn {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 8px;
+  min-height: 64px;
+}
+
+.producto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.producto-nombre {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.producto-precio {
+  color: #000000;
+  font-size: 0.95rem;
+  opacity: 1;
+}
+
+.carrito-lista {
+  display: grid;
+  gap: 12px;
+}
+
+.carrito-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.carrito-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.carrito-controles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cantidad-input {
+  width: 64px;
+  padding: 6px 8px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.carrito-resumen {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.pendientes-lista {
+  display: grid;
+  gap: 10px;
+}
+
+.pendiente-item {
+  display: grid;
+  gap: 4px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 8px;
+}
+
+.pendiente-item:last-child {
+  border-bottom: none;
+}
+
+.pendiente-nombre {
+  font-weight: 600;
+}
+
+.pendiente-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.pendiente-estado {
+  font-weight: 600;
+}
+
+.cuenta-lista {
+  display: grid;
+  gap: 10px;
+}
+
+.cuenta-item {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 8px;
+}
+
+.cuenta-item:last-child {
+  border-bottom: none;
+}
+
+.cuenta-nombre {
+  font-weight: 600;
+}
+
+.cuenta-detalle {
+  display: flex;
+  justify-content: space-between;
+  color: #555;
+  margin-top: 4px;
+}
+
+.cuenta-subtotal {
+  font-weight: 600;
+}
+
+.cuenta-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 2px solid #ddd;
+  font-weight: 700;
 }
