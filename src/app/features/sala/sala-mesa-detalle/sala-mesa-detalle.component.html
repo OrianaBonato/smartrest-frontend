@@ -75,7 +75,7 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- Panel de comandaje: productos, carrito, pendientes y cuenta -->
+  <!-- Panel de comandaje: productos, Comandas, pendientes y cuenta -->
   @if (servicioActual) {
     <section class="workspace">
       <mat-card class="info-card products-card">
@@ -100,7 +100,7 @@
       </mat-card>
 
       <mat-card class="info-card cart-card">
-        <mat-card-title>Carrito</mat-card-title>
+        <mat-card-title>Comandas</mat-card-title>
         <mat-card-content>
           @if (carrito.length === 0) {
             <div class="info-empty">Sin productos anadidos</div>
@@ -125,9 +125,6 @@
                   </div>
                 </div>
               }
-            </div>
-            <div class="carrito-resumen">
-              <span>Total items: {{ totalItems() }}</span>
             </div>
             <div class="card-actions">
               <button matButton="filled" (click)="enviarComandas()" [disabled]="enviandoComandas">

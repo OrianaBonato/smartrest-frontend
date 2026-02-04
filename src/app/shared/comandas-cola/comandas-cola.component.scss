@@ -14,17 +14,17 @@
 
 .cola-section {
   display: grid;
-  gap: 10px;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .cola-section-title {
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   color: #333;
 }
 
 .cola-title {
-  font-size: 1.1rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
@@ -36,14 +36,18 @@
 .cola-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
+  justify-content: start;
+  justify-items: start;
 }
 
 .cola-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 190px;
+  min-height: 200px;
+  width: 100%;
+  max-width: 320px;
 }
 
 .cola-meta {
@@ -112,6 +116,16 @@
   gap: 8px;
   justify-content: flex-end;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.cola-actions button {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 0;
+}
+
+.cola-actions button:only-child {
+  flex: 1 1 100%;
 }
 
 .table-wrap {

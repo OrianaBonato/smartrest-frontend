@@ -45,7 +45,7 @@ export class ComandasColaComponent implements OnInit {
         this.lineas = res;
         this.pendientes = this.lineas.filter(
           (l) => l.estado === 'PENDIENTE' || l.estado === 'EN_PREPARACION',
-        );
+        ).slice().sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? -1 : 1));
         this.listas = this.lineas
           .filter((l) => l.estado === 'LISTO')
           .slice()
@@ -64,13 +64,7 @@ export class ComandasColaComponent implements OnInit {
   cambiarEstado(linea: LineaComandaResponse, nuevoEstado: EstadoLinea) {
     this.comandaService.cambiarEstadoLinea(linea.idLinea, nuevoEstado).subscribe({
       next: (actualizada) => {
-        if (actualizada.estado === 'CANCELADO' || actualizada.estado === 'ENTREGADO') {
-          this.lineas = this.lineas.filter((l) => l.idLinea !== actualizada.idLinea);
-        } else {
-          const idx = this.lineas.findIndex((l) => l.idLinea === actualizada.idLinea);
-          if (idx >= 0) this.lineas[idx] = actualizada;
-        }
-        this.cdr.detectChanges();
+        this.cargarCola();
       },
       error: (e) => console.error('Error cambiando estado', e),
     });
