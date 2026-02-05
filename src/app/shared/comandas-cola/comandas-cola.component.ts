@@ -25,6 +25,7 @@ export class ComandasColaComponent implements OnInit {
   listas: LineaComandaResponse[] = [];
   listasCols: string[] = ['mesa', 'producto', 'cantidad', 'destino', 'fecha'];
   cargando = false;
+  private colaRequestId = 0;
 
   constructor(
     private comandaService: ComandaService,
@@ -39,9 +40,12 @@ export class ComandasColaComponent implements OnInit {
   // Refresca la cola desde el backend
   cargarCola() {
     if (!this.destino) return;
+    const requestId = ++this.colaRequestId;
     this.cargando = true;
+    this.cdr.markForCheck();
     this.comandaService.colaByDestino(this.destino).subscribe({
       next: (res) => {
+        if (requestId !== this.colaRequestId) return;
         this.lineas = res;
         this.pendientes = this.lineas.filter(
           (l) => l.estado === 'PENDIENTE' || l.estado === 'EN_PREPARACION',
@@ -51,11 +55,13 @@ export class ComandasColaComponent implements OnInit {
           .slice()
           .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1));
         this.cargando = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (e) => {
+        if (requestId !== this.colaRequestId) return;
         console.error('Error cargando cola', e);
         this.cargando = false;
+        this.cdr.markForCheck();
       },
     });
   }

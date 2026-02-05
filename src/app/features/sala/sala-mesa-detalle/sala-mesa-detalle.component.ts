@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { ComandaService, LineaComandaResponse } from '../../../services/comanda.service';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'smartrest-sala-mesa-detalle',
@@ -71,7 +72,7 @@ export class SalaMesaDetalleComponent implements OnInit {
       this.productoService.listar().subscribe({
         next: (productosRes) => {
           this.productos = productosRes;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: (e) => console.error(e),
       });
@@ -79,44 +80,53 @@ export class SalaMesaDetalleComponent implements OnInit {
   }
 
   getMesa() {
-    if (this.idMesa) {
-      this.loading = true;
-      this.mesaService.getMesa(this.idMesa).subscribe({
-        next: (data: any) => {
-          this.mesa = data;
-          if (this.mesa?.estado === 'OCUPADA') {
-            this.servicioEstaAbierto = true;
-            this.servicioService.getServicioMesaByMesaId(this.idMesa!).subscribe({
-              next: (s) => {
-                this.servicioActual = s;
-                this.cargarPendientes();
-                this.cargarLineas();
-                this.cdr.detectChanges();
-              },
-              error: (e) => {
-                this.servicioActual = undefined;
-                this.servicioEstaAbierto = false;
-                this.pendientes = [];
-                this.lineasServicio = [];
-                console.error('Error cargando servicio de mesa', e);
-                this.cdr.detectChanges();
-              },
-            });
-          } else {
-            this.servicioActual = undefined;
-            this.servicioEstaAbierto = false;
-            this.pendientes = [];
-            this.lineasServicio = [];
-          }
-          this.cdr.detectChanges();
-          this.loading = true;
-        },
-        error: (err: any) => {
-          this.loading = true;
-          console.error('Error cargando mesas', err);
-        },
-      });
-    }
+    if (!this.idMesa) return;
+    const mesaId = this.idMesa;
+    this.loading = true;
+    this.cdr.markForCheck();
+    this.mesaService.getMesa(mesaId).subscribe({
+      next: (data: any) => {
+        if (this.idMesa !== mesaId) return;
+        this.mesa = data;
+        this.cdr.markForCheck();
+        if (this.mesa?.estado === 'OCUPADA') {
+          this.servicioEstaAbierto = true;
+          this.servicioService.getServicioMesaByMesaId(mesaId).subscribe({
+            next: (s) => {
+              if (this.idMesa !== mesaId) return;
+              this.servicioActual = s;
+              this.cargarPendientes();
+              this.cargarLineas();
+              this.loading = false;
+              this.cdr.markForCheck();
+            },
+            error: (e) => {
+              if (this.idMesa !== mesaId) return;
+              this.servicioActual = undefined;
+              this.servicioEstaAbierto = false;
+              this.pendientes = [];
+              this.lineasServicio = [];
+              this.loading = false;
+              console.error('Error cargando servicio de mesa', e);
+              this.cdr.markForCheck();
+            },
+          });
+        } else {
+          this.servicioActual = undefined;
+          this.servicioEstaAbierto = false;
+          this.pendientes = [];
+          this.lineasServicio = [];
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      },
+      error: (err: any) => {
+        if (this.idMesa !== mesaId) return;
+        this.loading = false;
+        console.error('Error cargando mesas', err);
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   abrirServicio() {
@@ -138,6 +148,7 @@ export class SalaMesaDetalleComponent implements OnInit {
           this.cargarPendientes();
           this.cargarLineas();
           this.getMesa();
+          this.cdr.markForCheck();
         },
         error: (e) => console.error(e),
       });
@@ -159,7 +170,7 @@ export class SalaMesaDetalleComponent implements OnInit {
         this.pendientes = [];
         this.lineasServicio = [];
         this.getMesa();
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (e) => console.error(e),
     });
@@ -226,31 +237,34 @@ export class SalaMesaDetalleComponent implements OnInit {
       }),
     );
     this.enviandoComandas = true;
-    console.log('reqs length', reqs.length);
-    let pendientes = reqs.length;
-    const resultados: any[] = [];
-    reqs.forEach((obs, idx) => {
-      obs.subscribe({
-        next: (res) => {
-          resultados[idx] = res;
-        },
-        error: (e) => {
+    this.cdr.markForCheck();
+    const requests = reqs.map((req$) =>
+      req$.pipe(
+        catchError((e) => {
           console.error('Error enviando comanda', e);
+          return of(null);
+        }),
+      ),
+    );
+    forkJoin(requests)
+      .pipe(
+        finalize(() => {
           this.enviandoComandas = false;
-        },
-        complete: () => {
-          pendientes -= 1;
-          if (pendientes === 0) {
-            console.log('Comandas enviadas', resultados);
-            this.carrito = [];
-            this.enviandoComandas = false;
-            this.cargarPendientes();
-            this.cargarLineas();
-            this.cdr.detectChanges();
-          }
-        },
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe((resultados) => {
+        console.log('Comandas enviadas', resultados);
+        const fallidos = resultados
+          .map((res, idx) => (res ? null : carritoSnapshot[idx]))
+          .filter(
+            (item): item is { producto: Producto; cantidad: number } => item !== null,
+          );
+        this.carrito = fallidos;
+        this.cargarPendientes();
+        this.cargarLineas();
+        this.cdr.markForCheck();
       });
-    });
   }
 
   totalItems(): number {
@@ -262,15 +276,19 @@ export class SalaMesaDetalleComponent implements OnInit {
     const idServicio = this.servicioActual?.idServicio;
     if (!idServicio) {
       this.pendientes = [];
+      this.cdr.markForCheck();
       return;
     }
     this.comandaService.pendientesByServicioId(idServicio).subscribe({
       next: (res) => {
+        if (this.servicioActual?.idServicio !== idServicio) return;
         this.pendientes = res;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (e) => {
+        if (this.servicioActual?.idServicio !== idServicio) return;
         console.error('Error cargando pendientes', e);
+        this.cdr.markForCheck();
       },
     });
   }
@@ -280,15 +298,19 @@ export class SalaMesaDetalleComponent implements OnInit {
     const idServicio = this.servicioActual?.idServicio;
     if (!idServicio) {
       this.lineasServicio = [];
+      this.cdr.markForCheck();
       return;
     }
     this.comandaService.lineasByServicioId(idServicio).subscribe({
       next: (res) => {
+        if (this.servicioActual?.idServicio !== idServicio) return;
         this.lineasServicio = res;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (e) => {
+        if (this.servicioActual?.idServicio !== idServicio) return;
         console.error('Error cargando lineas', e);
+        this.cdr.markForCheck();
       },
     });
   }

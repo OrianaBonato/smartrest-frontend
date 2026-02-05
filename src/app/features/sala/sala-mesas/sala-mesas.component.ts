@@ -28,7 +28,7 @@ export class SalaMesasComponent implements OnInit {
     this.mesaService.getMesas().subscribe({
       next: (data) => {
         this.mesas = data;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       },
       error: (err) => console.error('Error cargando mesas', err),
     });
