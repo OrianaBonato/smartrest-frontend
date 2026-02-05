@@ -7,6 +7,7 @@ import { ComandasColaComponent } from '../../../shared/comandas-cola/comandas-co
   templateUrl: './cocina-home.component.html',
   styleUrl: './cocina-home.component.scss',
 })
+// Vista principal para cocina con cola de comandas.
 export class CocinaHomeComponent {
 
 }

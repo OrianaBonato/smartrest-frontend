@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
+// Bloquea rutas si no hay sesion.
 export const AuthGuard: CanActivateFn = (route) => {
   const auth = inject(AuthService);
   const router = inject(Router);

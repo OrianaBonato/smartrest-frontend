@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './admin-home.component.html',
   styleUrl: './admin-home.component.scss',
 })
+// Vista principal para el rol ADMIN.
 export class AdminHomeComponent {
 
 }

@@ -13,6 +13,7 @@ import { ComandaService, EstadoLinea, LineaComandaResponse } from '../../service
   templateUrl: './comandas-cola.component.html',
   styleUrl: './comandas-cola.component.scss',
 })
+// Cola de comandas para cocina o barra.
 export class ComandasColaComponent implements OnInit {
   // Destino de la cola: cocina o barra
   @Input({ required: true }) destino!: 'COCINA' | 'BARRA';

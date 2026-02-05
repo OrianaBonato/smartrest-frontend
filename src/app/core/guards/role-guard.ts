@@ -2,10 +2,11 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
+// Valida acceso a rutas segun el rol del usuario.
+
 export const RoleGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  console.log('hi')
   const rol = (auth.getRol() || '').toUpperCase();
   if (!rol) {
     router.navigateByUrl('/login');
@@ -32,6 +33,7 @@ export const RoleGuard: CanActivateFn = (route, state) => {
   return false;
 };
 
+// Devuelve la ruta de inicio segun el rol.
 function homeByRol(rol: string): string {
   switch (rol) {
     case 'SALA': return '/sala';

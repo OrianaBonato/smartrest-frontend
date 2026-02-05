@@ -19,11 +19,13 @@ const LS_KEY = 'smartrest_auth';
 @Injectable({
   providedIn: 'root',
 })
+// Servicio de autenticacion y sesion local.
 export class AuthService {
   private loggedInSubject = new BehaviorSubject<boolean>(this.hasAuthInStorage());
   loggedIn$ = this.loggedInSubject.asObservable();
   constructor(private http: HttpClient) {}
 
+  // Login contra el backend y guardado en localStorage.
   login(req: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`/api/auth/login`, req).pipe(
       tap((res) => {
@@ -38,6 +40,7 @@ export class AuthService {
     this.loggedInSubject.next(false);
   }
 
+  // Lee los datos de sesion desde localStorage.
   getAuth(): any | null {
     if (typeof window === 'undefined') {
       return null;
@@ -50,6 +53,7 @@ export class AuthService {
     return this.getAuth()?.rol ?? null;
   }
 
+  // Indica si hay sesion activa.
   isLoggedIn(): boolean {
     return !!this.getAuth();
   }

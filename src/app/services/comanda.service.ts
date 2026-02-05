@@ -29,26 +29,32 @@ export interface LineaComandaResponse {
 }
 
 @Injectable({ providedIn: 'root' })
+// Servicio para gestionar lineas de comanda.
 export class ComandaService {
   constructor(private http: HttpClient) {}
 
+  // Crea una linea de comanda.
   crearLinea(req: CrearLineaRequest): Observable<LineaComandaResponse> {
     return this.http.post<LineaComandaResponse>('/api/comandas/lineas', req);
   }
 
+  // Lista pendientes por servicio.
   pendientesByServicioId(idServicio: number): Observable<LineaComandaResponse[]> {
     return this.http.get<LineaComandaResponse[]>(`/api/servicios/${idServicio}/pendientes`);
   }
 
+  // Lista todas las lineas por servicio (cuenta).
   lineasByServicioId(idServicio: number): Observable<LineaComandaResponse[]> {
     return this.http.get<LineaComandaResponse[]>(`/api/servicios/${idServicio}/lineas`);
   }
 
+  // Lista cola por destino (cocina o barra).
   colaByDestino(destino: 'COCINA' | 'BARRA'): Observable<LineaComandaResponse[]> {
     const path = destino === 'COCINA' ? 'cocina' : 'barra';
     return this.http.get<LineaComandaResponse[]>(`/api/colas/${path}`);
   }
 
+  // Cambia el estado de una linea.
   cambiarEstadoLinea(idLinea: number, nuevoEstado: EstadoLinea): Observable<LineaComandaResponse> {
     return this.http.patch<LineaComandaResponse>(`/api/lineas/${idLinea}/estado`, { nuevoEstado });
   }

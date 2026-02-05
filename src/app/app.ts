@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
+// Componente raiz de la aplicacion.
 export class App {
   constructor(
     public authService: AuthService,
@@ -18,6 +19,7 @@ export class App {
   ) {}
   protected readonly title = signal('smartrest-frontend');
 
+  // Cierra sesion y vuelve a login.
   logout() {
     this.authService.logout();
       this.router.navigateByUrl('');

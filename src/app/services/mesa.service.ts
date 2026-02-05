@@ -13,13 +13,16 @@ export interface Mesa {
 @Injectable({
   providedIn: 'root',
 })
+// Servicio para consultar mesas.
 export class MesaService {
   constructor(private http: HttpClient) {}
 
+  // Lista todas las mesas.
   getMesas(): Observable<Mesa[]> {
     return this.http.get<Mesa[]>('/api/mesas/list');
   }
 
+  // Obtiene una mesa por id.
   getMesa(idMesa: number): Observable<Mesa> {
     return this.http.get<Mesa>(`/api/mesas/${idMesa}`);
   }

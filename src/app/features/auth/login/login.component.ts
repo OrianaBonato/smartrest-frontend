@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './login.component.html',
 })
+// Pantalla de login y validacion de credenciales.
 export class LoginComponent {
   form: FormGroup;
   error: string | null = null;
@@ -30,6 +31,7 @@ export class LoginComponent {
     });
   }
 
+  // Envia credenciales y redirige segun rol.
   submit(): void {
     this.error = null;
     if (this.form.invalid) return;
@@ -50,6 +52,7 @@ export class LoginComponent {
     });
   }
 
+  // Devuelve la ruta segun el rol.
   homeByRol(rol: string): string {
     switch (rol) {
       case 'SALA':

@@ -13,9 +13,11 @@ export interface Producto {
 }
 
 @Injectable({ providedIn: 'root' })
+// Servicio para consultar productos.
 export class ProductoService {
   constructor(private http: HttpClient) {}
 
+  // Lista todos los productos.
   listar(): Observable<Producto[]> {
     return this.http.get<Producto[]>('/api/productos/list');
   }

@@ -7,6 +7,7 @@ import { ComandasColaComponent } from '../../../shared/comandas-cola/comandas-co
   templateUrl: './barra-home.component.html',
   styleUrl: './barra-home.component.scss',
 })
+// Vista principal para barra con cola de comandas.
 export class BarraHomeComponent {
 
 }

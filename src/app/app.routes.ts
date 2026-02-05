@@ -11,6 +11,7 @@ import { RoleGuard } from './core/guards/role-guard';
 import { AlreadyLoggedGuard } from './core/guards/already-logged-guard';
 import { SalaMesaDetalleComponent } from './features/sala/sala-mesa-detalle/sala-mesa-detalle.component';
 
+// Rutas principales de la aplicacion.
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AlreadyLoggedGuard] },
 

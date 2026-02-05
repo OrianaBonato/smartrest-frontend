@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './sala-mesas.component.html',
   styleUrl: './sala-mesas.component.scss',
 })
+// Lista de mesas para el rol SALA.
 export class SalaMesasComponent implements OnInit {
   // Listado de mesas para el panel principal de sala
   mesas: Mesa[] = [];

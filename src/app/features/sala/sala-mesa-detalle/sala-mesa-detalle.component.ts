@@ -32,6 +32,7 @@ import { catchError, finalize, forkJoin, of } from 'rxjs';
   styleUrl: './sala-mesa-detalle.component.scss',
 })
 export class SalaMesaDetalleComponent implements OnInit {
+  // Vista de detalle de mesa para sala.
   // Datos base de mesa/servicio para el panel de comandaje
   mesa?: Mesa;
   idMesa?: number;
@@ -142,7 +143,6 @@ export class SalaMesaDetalleComponent implements OnInit {
       })
       .subscribe({
         next: (s) => {
-          console.log('Servicio abierto:', s);
           this.servicioEstaAbierto = true;
           this.servicioActual = s;
           this.cargarPendientes();
@@ -164,7 +164,6 @@ export class SalaMesaDetalleComponent implements OnInit {
     if (!confirmado) return;
     this.servicioService.cerrarServicio(idServicio).subscribe({
       next: (s) => {
-        console.log('Servicio cerrado:', s);
         this.servicioEstaAbierto = false;
         this.servicioActual = undefined;
         this.pendientes = [];
@@ -223,10 +222,6 @@ export class SalaMesaDetalleComponent implements OnInit {
     }
     const carritoSnapshot = [...this.carrito];
     if (carritoSnapshot.length === 0) return;
-    console.log('Enviando comandas', {
-      idServicio: this.servicioActual.idServicio,
-      items: carritoSnapshot.map((i) => ({ idProducto: i.producto.idProducto, cantidad: i.cantidad })),
-    });
     const reqs = carritoSnapshot.map((item) =>
       this.comandaService.crearLinea({
         idServicio: this.servicioActual!.idServicio,
@@ -254,7 +249,6 @@ export class SalaMesaDetalleComponent implements OnInit {
         }),
       )
       .subscribe((resultados) => {
-        console.log('Comandas enviadas', resultados);
         const fallidos = resultados
           .map((res, idx) => (res ? null : carritoSnapshot[idx]))
           .filter(
