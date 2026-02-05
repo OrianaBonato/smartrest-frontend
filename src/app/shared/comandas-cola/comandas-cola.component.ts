@@ -1,14 +1,15 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ComandaService, EstadoLinea, LineaComandaResponse } from '../../services/comanda.service';
 
 @Component({
   selector: 'smartrest-comandas-cola',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatTableModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatTableModule, MatPaginatorModule],
   templateUrl: './comandas-cola.component.html',
   styleUrl: './comandas-cola.component.scss',
 })
@@ -23,9 +24,27 @@ export class ComandasColaComponent implements OnInit {
   lineas: LineaComandaResponse[] = [];
   pendientes: LineaComandaResponse[] = [];
   listas: LineaComandaResponse[] = [];
+  canceladas: LineaComandaResponse[] = [];
   listasCols: string[] = ['mesa', 'producto', 'cantidad', 'destino', 'fecha'];
+  canceladasCols: string[] = ['mesa', 'producto', 'cantidad', 'destino', 'fecha'];
+  listasDataSource = new MatTableDataSource<LineaComandaResponse>([]);
+  canceladasDataSource = new MatTableDataSource<LineaComandaResponse>([]);
+  readonly listasPageSize = 10;
+  readonly canceladasPageSize = 10;
   cargando = false;
   private colaRequestId = 0;
+  @ViewChild('listasPaginator')
+  set listasPaginator(paginator: MatPaginator | undefined) {
+    if (!paginator) return;
+    this.listasDataSource.paginator = paginator;
+    this.cdr.markForCheck();
+  }
+  @ViewChild('canceladasPaginator')
+  set canceladasPaginator(paginator: MatPaginator | undefined) {
+    if (!paginator) return;
+    this.canceladasDataSource.paginator = paginator;
+    this.cdr.markForCheck();
+  }
 
   constructor(
     private comandaService: ComandaService,
@@ -54,6 +73,18 @@ export class ComandasColaComponent implements OnInit {
           .filter((l) => l.estado === 'LISTO')
           .slice()
           .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1));
+        this.canceladas = this.lineas
+          .filter((l) => l.estado === 'CANCELADO')
+          .slice()
+          .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1));
+        this.listasDataSource.data = this.listas;
+        this.canceladasDataSource.data = this.canceladas;
+        if (this.listasDataSource.paginator) {
+          this.listasDataSource.paginator.firstPage();
+        }
+        if (this.canceladasDataSource.paginator) {
+          this.canceladasDataSource.paginator.firstPage();
+        }
         this.cargando = false;
         this.cdr.markForCheck();
       },
