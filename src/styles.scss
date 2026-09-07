@@ -6,13 +6,17 @@
 @use '@angular/material' as mat;
 @use './smartrest_theme-colors' as smartrest;
 
+// Sistema visual del rediseno v2.0: tokens y piezas compartidas.
+@use './app/styles/tokens';
+@use './app/styles/componentes';
+
 html {
   @include mat.theme(
     (
       color: (
         primary: smartrest.$primary-palette,
       ),
-      typography: Roboto,
+      typography: Figtree,
       density: 0,
     )
   );
@@ -53,7 +57,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: var(--sr-fuente);
 }
 
 .smartrest-logo-blanco {

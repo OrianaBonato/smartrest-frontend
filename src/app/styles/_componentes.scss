@@ -1,0 +1,294 @@
+// Piezas visuales que se repiten entre las pantallas del rediseno.
+// Viven en global a proposito: asi el CSS se compila una sola vez en lugar de
+// duplicarse en cada componente, y ninguna hoja de estilos roza el limite de
+// 4kB por componente que fija angular.json.
+
+// Numeros y etiquetas cortas: Space Grotesk en peso ligero.
+.sr-num {
+  font-family: var(--sr-fuente-num);
+  font-weight: 300;
+  line-height: 1;
+}
+
+// Encabezado de pantalla: titulo, resumen y accion a la derecha.
+.sr-encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sr-encabezado__titulo {
+  margin: 0;
+  font: 800 34px/1.05 var(--sr-fuente);
+  letter-spacing: -0.02em;
+  color: var(--sr-verde-oscuro);
+}
+
+.sr-encabezado__resumen {
+  margin-top: 7px;
+  font: 500 16px var(--sr-fuente);
+  color: var(--sr-texto-suave);
+}
+
+// Tarjeta blanca base.
+.sr-card {
+  box-sizing: border-box;
+  background: var(--sr-blanco);
+  border: 1px solid var(--sr-borde);
+  border-radius: var(--sr-r-xl);
+  box-shadow: var(--sr-sombra-card);
+  padding: 20px;
+}
+
+// Chip de estado. Por defecto pinta el estado pendiente.
+.sr-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 13px;
+  border-radius: var(--sr-r-pill);
+  font-family: var(--sr-fuente-num);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  background: var(--sr-pendiente-bg);
+  color: var(--sr-pendiente-fg);
+}
+
+.sr-chip.is-preparacion {
+  background: var(--sr-preparacion-bg);
+  color: var(--sr-preparacion-fg);
+}
+
+.sr-chip.is-listo {
+  background: var(--sr-listo-bg);
+  color: var(--sr-listo-fg);
+}
+
+.sr-chip.is-cancelado {
+  background: var(--sr-cancelado-bg);
+  color: var(--sr-cancelado-fg);
+}
+
+// Pestana con contador.
+.sr-tab {
+  flex: 1;
+  min-width: 0;
+  height: 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 2px solid var(--sr-borde-medio);
+  border-radius: var(--sr-r-m);
+  background: var(--sr-blanco);
+  color: var(--sr-verde);
+  font: 700 17px var(--sr-fuente);
+  cursor: pointer;
+}
+
+.sr-tab__count {
+  font-family: var(--sr-fuente-num);
+  font-weight: 300;
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+.sr-tab.is-activa {
+  background: var(--sr-verde);
+  border-color: var(--sr-verde);
+  color: var(--sr-blanco);
+}
+
+// Estado vacio.
+.sr-empty {
+  border: 2px dashed var(--sr-borde-medio);
+  border-radius: var(--sr-r-xl);
+  padding: 60px 24px;
+  text-align: center;
+  font: 600 18px var(--sr-fuente);
+  color: var(--sr-texto-tenue);
+}
+
+// Botones. .sr-btn da la forma, el modificador el color.
+.sr-btn {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 0;
+  border-radius: var(--sr-r-m);
+  font-family: var(--sr-fuente);
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    filter 0.15s ease;
+}
+
+.sr-btn:active {
+  transform: translateY(2px);
+}
+
+.sr-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sr-btn--principal {
+  background: var(--sr-verde);
+  color: var(--sr-blanco);
+  font-weight: 800;
+  box-shadow: var(--sr-sombra-accion);
+}
+
+.sr-btn--principal:hover:not(:disabled) {
+  background: var(--sr-verde-oscuro);
+}
+
+.sr-btn--ambar {
+  background: var(--sr-ambar);
+  color: var(--sr-blanco);
+  font-weight: 800;
+  box-shadow: var(--sr-sombra-ambar);
+}
+
+.sr-btn--ambar:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.sr-btn--secundario {
+  background: var(--sr-blanco);
+  color: var(--sr-verde);
+  border: 2px solid var(--sr-borde-fuerte);
+}
+
+.sr-btn--secundario:hover:not(:disabled) {
+  background: var(--sr-verde);
+  border-color: var(--sr-verde);
+  color: var(--sr-blanco);
+}
+
+.sr-btn--peligro {
+  background: var(--sr-blanco);
+  color: var(--sr-rojo);
+  border: 2px solid var(--sr-rojo-borde);
+}
+
+.sr-btn--peligro:hover:not(:disabled) {
+  background: var(--sr-rojo);
+  border-color: var(--sr-rojo);
+  color: var(--sr-blanco);
+}
+
+// Separador de seccion: punto, etiqueta y linea.
+.sr-seccion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sr-seccion__punto {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sr-verde);
+}
+
+.sr-seccion__texto {
+  font-family: var(--sr-fuente-num);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--sr-verde);
+}
+
+.sr-seccion__linea {
+  flex: 1;
+  height: 1px;
+  background: var(--sr-borde);
+}
+
+.sr-seccion.is-tenue .sr-seccion__punto {
+  background: var(--sr-gris);
+}
+
+.sr-seccion.is-tenue .sr-seccion__texto {
+  color: var(--sr-texto-suave);
+}
+
+// Halo verde pulsante para lo que esta listo para servir.
+@keyframes srHalo {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.95;
+  }
+  55% {
+    transform: scale(1.24);
+    opacity: 0.38;
+  }
+  100% {
+    transform: scale(1.06);
+    opacity: 0.8;
+  }
+}
+
+.sr-halo {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.sr-halo::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: var(--sr-r-m);
+  background: var(--sr-listo-halo);
+  filter: blur(8px);
+  animation: srHalo 1.5s ease-in-out infinite;
+}
+
+.sr-halo > * {
+  position: relative;
+}
+
+// Pantallas estrechas: el titulo baja de tamano y las pestanas se aprietan.
+@media (max-width: 600px) {
+  .sr-encabezado__titulo {
+    font-size: 26px;
+  }
+
+  .sr-tab {
+    height: 64px;
+    font-size: 15px;
+  }
+
+  .sr-empty {
+    padding: 40px 18px;
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-halo::before {
+    animation: none;
+  }
+
+  .sr-btn {
+    transition: none;
+  }
+
+  .sr-btn:active {
+    transform: none;
+  }
+}
