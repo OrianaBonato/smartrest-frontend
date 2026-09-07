@@ -1,196 +1,227 @@
-<section class="panel">
-  <div class="panel-top">
-    <button matButton="outlined" class="back-btn" [routerLink]="['/sala']">
-      <mat-icon>arrow_back</mat-icon>
-      Volver a mesas
+<section class="mesa">
+  <div class="mesa__volver">
+    <button class="sr-btn sr-btn--secundario mesa__volver-btn" [routerLink]="['/sala']">
+      <span aria-hidden="true">←</span>
+      Mesas
     </button>
   </div>
-  <!-- Resumen rapido de mesa y servicio -->
-  <mat-card class="summary-card">
-    <mat-card-content>
-      <div class="summary-header">
-        <div class="summary-title">
-          <div class="mesa-title">Mesa {{ mesa?.numero }}</div>
-          <div class="mesa-meta">
-            Capacidad {{ mesa?.capacidad }} ·
-            <span class="mesa-estado-inline">
-              <mat-icon class="estado-icon mat-symbol" fontSet="material-symbols-outlined">
-                {{ mesa?.estado === 'OCUPADA' ? 'dine_in' : 'table_restaurant' }}
-              </mat-icon>
-              {{ mesa?.estado }}
-            </span>
-          </div>
-        </div>
-        <div class="summary-chip" [class.is-open]="servicioActual?.estado === 'ABIERTO'">
-          {{ servicioActual ? 'Servicio ' + servicioActual.estado : 'Sin servicio' }}
-        </div>
-      </div>
 
-      @if (servicioActual) {
-        <div class="summary-grid">
-          <div class="summary-item">
-            <span class="summary-label">Servicio</span>
-            <span>#{{ servicioActual.idServicio }}</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-label">Comensales</span>
-            <span>{{ servicioActual.numeroComensales }}</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-label">Inicio</span>
-            <span>{{ servicioActual.fechaInicio | date: 'short' }}</span>
-          </div>
-          <div class="summary-item summary-wide">
-            <span class="summary-label">Observaciones</span>
-            <span>{{ servicioActual.observaciones || 'Sin observaciones' }}</span>
-          </div>
-        </div>
-        <div class="card-actions">
-          <button matButton="filled" (click)="cerrarServicio()">Cerrar servicio</button>
-        </div>
+  <div class="mesa__ficha">
+    <div class="sr-num mesa__ficha-numero" [class.is-abierto]="servicioEstaAbierto">
+      {{ numeroMesa }}
+    </div>
+    <div class="mesa__ficha-datos">
+      @if (servicioEstaAbierto && servicioActual) {
+        <h1 class="mesa__ficha-titulo">Mesa {{ mesa?.numero }} · Capacidad {{ mesa?.capacidad }}</h1>
+        <p class="mesa__ficha-meta">
+          Servicio #{{ servicioActual.idServicio }} · {{ servicioActual.numeroComensales }}
+          comensales · desde {{ horaInicio }}
+        </p>
       } @else {
-        <div class="info-empty">Mesa libre. Puedes iniciar un servicio.</div>
-        <form class="form-servicio" [formGroup]="formAbrir" (ngSubmit)="abrirServicio()">
-          <mat-form-field appearance="outline">
-            <mat-label>Num comensales</mat-label>
-            <input matInput type="number" formControlName="numeroComensales" />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Observaciones</mat-label>
-            <input matInput formControlName="observaciones" placeholder="Ej: sin gluten" />
-          </mat-form-field>
-        </form>
-        <div class="card-actions">
-          <button
-            type="submit"
-            matButton="filled"
-            (click)="abrirServicio()"
-            [disabled]="this.formAbrir.invalid && loading"
-          >
-            Empezar servicio
-          </button>
-        </div>
+        <h1 class="mesa__ficha-titulo">Abrir mesa {{ mesa?.numero }}</h1>
+        <p class="mesa__ficha-meta">Libre · capacidad {{ mesa?.capacidad }}</p>
       }
-    </mat-card-content>
-  </mat-card>
+    </div>
+    @if (servicioEstaAbierto) {
+      <span class="sr-num mesa__ficha-chip">ABIERTO</span>
+    }
+  </div>
 
-  <!-- Panel de comandaje: productos, Comandas, pendientes y cuenta -->
-  @if (servicioActual) {
-    <section class="workspace">
-      <mat-card class="info-card products-card">
-        <mat-card-title>Productos</mat-card-title>
-        <mat-card-content>
-          <div class="productos-grid">
-            @for (producto of productos; track producto.idProducto) {
-              <button
-                mat-raised-button
-                color="primary"
-                class="producto-item-btn"
-                (click)="agregarAlCarrito(producto)"
-              >
-                <div class="producto-info">
-                  <div class="producto-nombre">{{ producto.nombre }}</div>
-                  <div class="producto-precio">{{ producto.precio | currency: 'EUR' }}</div>
-                </div>
-              </button>
+  @if (servicioActual?.observaciones; as observaciones) {
+    <div class="mesa__observaciones">
+      <span class="sr-num mesa__observaciones-etiqueta">OBSERVACIONES</span>
+      <span class="mesa__observaciones-texto">{{ observaciones }}</span>
+    </div>
+  }
+
+  <!-- Mesa libre: formulario de apertura -->
+  @if (!servicioEstaAbierto) {
+    <form class="mesa__abrir" [formGroup]="formAbrir" (ngSubmit)="abrirServicio()">
+      <div class="mesa__contenido">
+        <div class="mesa__paso">
+          <span class="sr-num mesa__paso-numero is-activo">1</span>
+          <span class="mesa__paso-titulo">¿Cuántos comensales?</span>
+        </div>
+        <div class="mesa__comensales">
+          @for (n of opcionesComensales; track n) {
+            <button
+              type="button"
+              class="sr-num mesa__comensal"
+              [class.is-activo]="comensalesElegidos === n"
+              (click)="seleccionarComensales(n)"
+            >
+              {{ n === 8 ? '8+' : n }}
+            </button>
+          }
+        </div>
+
+        <div class="mesa__paso mesa__paso--segundo">
+          <span class="sr-num mesa__paso-numero" [class.is-activo]="comensalesElegidos">2</span>
+          <span class="mesa__paso-titulo" [class.is-inactivo]="!comensalesElegidos">
+            Observaciones
+          </span>
+          <span class="mesa__paso-opcional">opcional</span>
+        </div>
+
+        @if (!comensalesElegidos) {
+          <div class="sr-empty">Elige primero el número de comensales</div>
+        } @else {
+          <textarea
+            class="mesa__textarea"
+            formControlName="observaciones"
+            placeholder="Alergias, sillas de bebé, celebración, mesa juntada..."
+          ></textarea>
+          <div class="mesa__atajos">
+            @for (a of atajos; track a) {
+              <button type="button" class="mesa__atajo" (click)="anadirAtajo(a)">{{ a }}</button>
             }
           </div>
-        </mat-card-content>
-      </mat-card>
+        }
+      </div>
 
-      <mat-card class="info-card cart-card">
-        <mat-card-title>Comandas</mat-card-title>
-        <mat-card-content>
-          @if (carrito.length === 0) {
-            <div class="info-empty">Sin productos anadidos</div>
-          } @else {
-            <div class="carrito-lista">
-              @for (item of carrito; track item.producto.idProducto) {
-                <div class="carrito-item">
-                  <div class="carrito-info">
-                    <div class="producto-nombre">{{ item.producto.nombre }}</div>
-                    <div class="producto-precio">{{ item.producto.precio | currency: 'EUR' }}</div>
+      <div class="mesa__pie">
+        <div class="mesa__pie-resumen">
+          <span class="sr-num mesa__pie-etiqueta">RESUMEN</span>
+          <span class="mesa__pie-texto">{{ resumenApertura }}</span>
+        </div>
+        <button
+          type="submit"
+          class="sr-btn sr-btn--principal mesa__continuar"
+          [disabled]="!comensalesElegidos"
+        >
+          Continuar
+        </button>
+      </div>
+    </form>
+  }
+
+  <!-- Mesa ocupada: comandero -->
+  @if (servicioEstaAbierto) {
+    <nav class="mesa__categorias">
+      @for (c of categorias; track c) {
+        <button
+          class="sr-tab mesa__categoria"
+          [class.is-activa]="categoriaActiva === c"
+          (click)="seleccionarCategoria(c)"
+        >
+          {{ c }}
+        </button>
+      }
+    </nav>
+
+    <div class="mesa__contenido">
+      @if (productosVisibles.length === 0) {
+        <div class="sr-empty">No hay productos en esta categoría</div>
+      } @else {
+        <div class="mesa__productos">
+          @for (p of productosVisibles; track p.idProducto) {
+            <button class="mesa__producto" (click)="agregarAlCarrito(p)">
+              <span class="mesa__producto-nombre">{{ p.nombre }}</span>
+              <span class="mesa__producto-pie">
+                <span class="sr-num mesa__producto-precio">{{ precio(p) }}</span>
+                <span class="mesa__producto-destino">
+                  <span class="sr-num mesa__producto-etiqueta">{{ p.destinoDefecto }}</span>
+                  <span class="mesa__producto-mas" aria-hidden="true">+</span>
+                </span>
+              </span>
+            </button>
+          }
+        </div>
+      }
+
+      @if (pendientes.length > 0) {
+        <div class="mesa__pendientes">
+          <div class="sr-seccion">
+            <span class="sr-seccion__punto"></span>
+            <span class="sr-seccion__texto">EN COCINA Y BARRA</span>
+            <span class="sr-seccion__linea"></span>
+          </div>
+          <div class="mesa__pendientes-lista">
+            @for (l of pendientes; track l.idLinea) {
+              <div class="mesa__pendiente">
+                <span class="sr-num mesa__pendiente-cantidad">{{ l.cantidad }}</span>
+                <div class="mesa__pendiente-datos">
+                  <div class="mesa__pendiente-nombre">
+                    {{ l.productoNombre || 'Producto #' + l.idProducto }}
                   </div>
-                  <div class="carrito-controles">
-                    <button matButton="outlined" (click)="quitarDelCarrito(item.producto)">-</button>
-                    <input
-                      class="cantidad-input"
-                      type="number"
-                      min="1"
-                      [value]="item.cantidad"
-                      (input)="actualizarCantidad(item.producto, $any($event.target).value)"
-                    />
-                    <button matButton="outlined" (click)="agregarAlCarrito(item.producto)">+</button>
+                  <div class="sr-num mesa__pendiente-meta">
+                    {{ l.cantidad }} uds · {{ l.destino }}
                   </div>
                 </div>
-              }
-            </div>
-            <div class="card-actions">
-              <button matButton="filled" (click)="enviarComandas()" [disabled]="enviandoComandas">
-                Enviar comandas
+                <span class="sr-chip" [class.is-preparacion]="l.estado === 'EN_PREPARACION'">
+                  {{ l.estado }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="mesa__pie">
+      <button class="mesa__cuenta-barra" (click)="abrirCuenta()">
+        <span class="mesa__cuenta-asa" aria-hidden="true"></span>
+        <span class="mesa__cuenta-linea">
+          <span class="mesa__cuenta-textos">
+            <span class="sr-num mesa__cuenta-etiqueta">CUENTA</span>
+            <span class="mesa__cuenta-detalle">
+              {{ cuentaLineas.length }} productos · dividir o cobrar
+            </span>
+          </span>
+          <span class="sr-num mesa__cuenta-total">{{ totalFormateado }}</span>
+        </span>
+      </button>
+
+      @if (carrito.length === 0) {
+        <div class="mesa__carrito-vacio">Toca un producto para empezar la comanda</div>
+      } @else {
+        <div class="mesa__carrito">
+          @for (item of carrito; track item.producto.idProducto) {
+            <div class="mesa__carrito-item">
+              <div class="mesa__carrito-datos">
+                <div class="mesa__carrito-nombre">{{ item.producto.nombre }}</div>
+                <div class="sr-num mesa__carrito-precio">{{ precio(item.producto) }}</div>
+              </div>
+              <button
+                class="sr-btn sr-btn--secundario mesa__paso-btn"
+                (click)="quitarDelCarrito(item.producto)"
+                aria-label="Quitar una unidad"
+              >
+                −
+              </button>
+              <span class="sr-num mesa__carrito-cantidad">{{ item.cantidad }}</span>
+              <button
+                class="sr-btn sr-btn--principal mesa__paso-btn"
+                (click)="agregarAlCarrito(item.producto)"
+                aria-label="Añadir una unidad"
+              >
+                +
               </button>
             </div>
           }
-        </mat-card-content>
-      </mat-card>
+        </div>
+        <button
+          class="sr-btn sr-btn--principal mesa__enviar"
+          (click)="enviarComandas()"
+          [disabled]="enviandoComandas"
+        >
+          <span>{{ enviandoComandas ? 'Enviando…' : 'Enviar comandas' }}</span>
+          <span class="sr-num mesa__enviar-contador">{{ unidadesCarrito }}</span>
+        </button>
+      }
+    </div>
+  }
 
-      <mat-card class="info-card pending-card">
-        <mat-card-title>Pendientes</mat-card-title>
-        <mat-card-content>
-          @if (pendientes.length === 0) {
-            <div class="info-empty">Sin comandas pendientes</div>
-          } @else {
-            <div class="pendientes-lista">
-              @for (p of pendientes; track p.idLinea) {
-                <div class="pendiente-item">
-                  <div class="pendiente-nombre">
-                    {{ p.productoNombre || ('Producto #' + p.idProducto) }}
-                  </div>
-                  <div class="pendiente-meta">
-                    <span>{{ p.cantidad }} uds</span>
-                    <span class="pendiente-estado">{{ p.estado }}</span>
-                    <span>{{ p.destino }}</span>
-                  </div>
-                </div>
-              }
-            </div>
-          }
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="info-card bill-card">
-        <mat-card-title>Cuenta</mat-card-title>
-        <mat-card-content>
-          @if (lineasServicio.length === 0) {
-            <div class="info-empty">Sin comandas</div>
-          } @else {
-            <div class="cuenta-lista">
-              @for (l of lineasServicio; track l.idLinea) {
-                <div class="cuenta-item">
-                  <div class="cuenta-nombre">
-                    {{ l.productoNombre || ('Producto #' + l.idProducto) }}
-                  </div>
-                  <div class="cuenta-detalle">
-                    <span>{{ l.cantidad }} x {{ l.precioUnitario | currency: 'EUR' }}</span>
-                    <span class="cuenta-subtotal">
-                      {{ l.cantidad * l.precioUnitario | currency: 'EUR' }}
-                    </span>
-                  </div>
-                </div>
-              }
-            </div>
-            <div class="cuenta-total">
-              <span>Total</span>
-              <span>{{ totalCuenta() | currency: 'EUR' }}</span>
-            </div>
-          }
-        </mat-card-content>
-      </mat-card>
-    </section>
-  } @else {
-    <div class="info-empty panel-note">Inicia un servicio para anadir comandas.</div>
+  <!-- Panel de cuenta -->
+  @if (cuentaAbierta) {
+    <smartrest-sala-cuenta
+      [lineas]="cuentaLineas"
+      [total]="totalCuenta()"
+      [numeroMesa]="mesa?.numero"
+      [servicio]="servicioActual"
+      [comensales]="servicioActual?.numeroComensales"
+      (cerrar)="cerrarCuenta()"
+      (cobrar)="cerrarServicio()"
+    />
   }
 </section>
-
-

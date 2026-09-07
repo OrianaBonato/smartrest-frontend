@@ -1,0 +1,79 @@
+<div class="cuenta">
+  <div class="cuenta__scrim" (click)="cerrar.emit()"></div>
+  <div class="cuenta__panel">
+    <div class="cuenta__asa" aria-hidden="true"></div>
+
+    <div class="cuenta__cabecera">
+      <div>
+        <h2 class="cuenta__titulo">Cuenta · Mesa {{ numeroMesa }}</h2>
+        <p class="cuenta__meta">
+          Servicio #{{ servicio?.idServicio }} · {{ servicio?.numeroComensales }} comensales ·
+          desde {{ horaInicio }}
+        </p>
+      </div>
+      <button class="sr-btn sr-btn--secundario cuenta__cerrar" (click)="cerrar.emit()">✕</button>
+    </div>
+
+    <div class="cuenta__contenido">
+      <div class="cuenta__bloque">
+        @if (lineas.length === 0) {
+          <div class="sr-empty">Todavía no hay nada que cobrar</div>
+        } @else {
+          @for (l of lineas; track l.idLinea) {
+            <div class="cuenta__linea">
+              <span class="sr-num cuenta__linea-cantidad">{{ l.cantidad }}</span>
+              <div class="cuenta__linea-datos">
+                <div class="cuenta__linea-nombre">{{ l.producto }}</div>
+                <div class="sr-num cuenta__linea-detalle">{{ l.detalle }}</div>
+              </div>
+              <span class="sr-num cuenta__linea-subtotal">{{ l.subtotal }}</span>
+            </div>
+          }
+          <div class="cuenta__total">
+            <span class="cuenta__total-etiqueta">Total</span>
+            <span class="sr-num cuenta__total-valor">{{ totalFormateado }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="cuenta__bloque">
+        <div class="sr-num cuenta__bloque-titulo">DIVIDIR CUENTA</div>
+        <div class="cuenta__partes">
+          <button class="sr-btn sr-btn--secundario cuenta__parte-btn" (click)="menosPartes()">
+            −
+          </button>
+          <div class="cuenta__partes-valor">
+            <div class="sr-num cuenta__partes-numero">{{ partes }}</div>
+            <div class="cuenta__partes-texto">partes iguales</div>
+          </div>
+          <button class="sr-btn sr-btn--principal cuenta__parte-btn" (click)="masPartes()">+</button>
+          <div class="cuenta__cada-uno">
+            <div class="sr-num cuenta__cada-uno-etiqueta">CADA UNO</div>
+            <div class="sr-num cuenta__cada-uno-valor">{{ porParte }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cuenta__bloque">
+        <div class="sr-num cuenta__bloque-titulo">FORMA DE PAGO</div>
+        <div class="cuenta__metodos">
+          @for (m of metodosPago; track m) {
+            <button
+              class="sr-tab cuenta__metodo"
+              [class.is-activa]="metodoPago === m"
+              (click)="seleccionarMetodo(m)"
+            >
+              {{ m }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="cuenta__pie">
+      <button class="sr-btn sr-btn--principal cuenta__cobrar" (click)="cobrar.emit()">
+        Cobrar {{ totalFormateado }}
+      </button>
+    </div>
+  </div>
+</div>
