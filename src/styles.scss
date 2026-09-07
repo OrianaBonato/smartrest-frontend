@@ -85,7 +85,9 @@ body {
 .smartrest-fondo {
   width: 100%;
   height: 100%;
-  background-image: url('./assets/img/smartrest-fondo-pattern-blanco-vector.svg');
+  // PNG en lugar del SVG: el vector pesa 9,4 MB y aqui se escala con cover,
+  // asi que el trazado no aporta nada frente a un bitmap de 1920x1080.
+  background-image: url('./assets/img/smartrest-fondo-pattern-blanco.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
