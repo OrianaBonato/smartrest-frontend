@@ -70,65 +70,6 @@ body {
   display: block;
 }
 
-.smartrest-logo-verde {
-  width: 16rem; 
-  height: 16rem; 
-  background-image: url('./assets/img/smartrest-logo-verde-500x500px.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  display: block;
-  margin: auto;
-  margin-bottom: 2rem;
-}
-
-.smartrest-fondo {
-  width: 100%;
-  height: 100%;
-  // PNG en lugar del SVG: el vector pesa 9,4 MB y aqui se escala con cover,
-  // asi que el trazado no aporta nada frente a un bitmap de 1920x1080.
-  background-image: url('./assets/img/smartrest-fondo-pattern-blanco.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  display: block;
-  position: absolute;
-  z-index: -1;
-}
-
-.smartrest-fondo-gris {
-  width: 100%;
-  height: 100%;
-  background-image: url('./assets/img/smartrest-fondo-pattern-gris-vector.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  display: block;
-  position: absolute;
-  z-index: -1;
-  opacity: 0.8;
-}
-
-.smartrest-fondo-background {
-  background-color: #185638;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -1;
-}
-
-.smartrest-login-card-container {
-  padding: 5rem;
-  border-radius: 2rem;
-  max-width: 20rem;
-  margin: auto;
-  display: grid;
-  gap: 16px;
-  background-color: #fff;
-  position: sticky;
-  top: 10%;
-}
-
 .smartrest-toolbar {
   height: 8vh !important;
   background-color: #10432a !important;
