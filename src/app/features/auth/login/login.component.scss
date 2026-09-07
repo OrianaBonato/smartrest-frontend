@@ -1,0 +1,373 @@
+// Las imagenes se referencian desde SCSS porque angular.json solo publica
+// public/ como assets: src/assets/img solo llega al build por esta via.
+$img: '../../../../assets/img';
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.login {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: var(--sr-verde);
+}
+
+.login__pattern,
+.login__brillo,
+.login__splash {
+  position: absolute;
+  inset: 0;
+}
+
+.login__pattern {
+  background: url('#{$img}/smartrest-fondo-pattern-blanco.png') center / cover no-repeat;
+  opacity: 0.16;
+}
+
+.login__brillo {
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.1), transparent 60%);
+}
+
+.login__contenido {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 40px 24px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.login__logo {
+  width: 230px;
+  height: 230px;
+  max-width: 40vw;
+  max-height: 40vw;
+  margin-bottom: 34px;
+  background: url('#{$img}/smartrest-logo-blanco-500x500px.png') center / contain no-repeat;
+  animation: srRise 0.9s ease-in-out 3.1s both;
+}
+
+.login__card {
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+  padding: 52px 48px;
+  border-radius: var(--sr-r-xxl);
+  background: var(--sr-blanco);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+  animation: srPop 0.85s cubic-bezier(0.2, 0.9, 0.3, 1.1) 3.45s both;
+}
+
+.login__titulo {
+  margin: 0;
+  font: 800 34px/1.1 var(--sr-fuente);
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--sr-verde-oscuro);
+}
+
+.login__subtitulo {
+  margin: 10px 0 0;
+  font: 500 17px/1.5 var(--sr-fuente);
+  text-align: center;
+  text-wrap: pretty;
+  color: var(--sr-texto-suave);
+}
+
+.login__campos {
+  display: grid;
+  gap: 22px;
+  margin-top: 34px;
+}
+
+.login__campo {
+  display: grid;
+  gap: 10px;
+}
+
+.login__etiqueta {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--sr-verde);
+}
+
+.login__password {
+  position: relative;
+  display: block;
+}
+
+.login__input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 76px;
+  padding: 0 22px;
+  border: 2px solid var(--sr-borde-medio);
+  border-radius: var(--sr-r-m);
+  background: var(--sr-fondo);
+  font: 600 19px var(--sr-fuente);
+  color: var(--sr-texto);
+  outline: none;
+}
+
+.login__password .login__input {
+  padding-right: 84px;
+}
+
+.login__input:focus {
+  border-color: var(--sr-verde);
+  background: var(--sr-blanco);
+}
+
+.login__ojo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sr-texto-suave);
+  cursor: pointer;
+}
+
+.login__ojo:hover {
+  color: var(--sr-verde);
+}
+
+.login__entrar {
+  width: 100%;
+  height: 84px;
+  margin-top: 32px;
+  font-size: 22px;
+  border-radius: var(--sr-r-l);
+}
+
+.login__error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 18px 20px;
+  border: 1px solid var(--sr-rojo-borde);
+  border-radius: var(--sr-r-s);
+  background: var(--sr-cancelado-bg);
+}
+
+.login__error-punto {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sr-rojo);
+}
+
+.login__error-texto {
+  font: 600 16px var(--sr-fuente);
+  color: var(--sr-cancelado-fg);
+}
+
+// Animacion de entrada.
+.login__splash {
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  background: #06200f;
+  animation:
+    srSplashOut 3.6s ease-in forwards,
+    srSplashBg 3.6s ease-in-out forwards;
+}
+
+.login__splash-pattern {
+  position: absolute;
+  inset: 0;
+  background: url('#{$img}/smartrest-fondo-pattern-blanco.png') center / cover no-repeat;
+  animation: srPatternIn 3.6s ease-in-out forwards;
+}
+
+.login__splash-marca {
+  position: relative;
+  width: 280px;
+  height: 347px;
+  max-width: 70vw;
+}
+
+.login__anillo {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  width: 300px;
+  height: 300px;
+  border: 3px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  animation: srRing 1.1s ease-out 0.44s both;
+}
+
+.login__anillo--tardio {
+  border-color: rgba(255, 255, 255, 0.3);
+  animation-delay: 0.72s;
+}
+
+.login__icono {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 280px;
+  background: url('#{$img}/smartrest-icono-blanco-500x500px.png') center / contain no-repeat;
+  animation: srIconIn 1.4s cubic-bezier(0.28, 0.9, 0.3, 1) both;
+}
+
+.login__marca {
+  position: absolute;
+  left: 40px;
+  top: 192px;
+  width: 154px;
+  height: 154px;
+  background: url('#{$img}/smartrest-marca-blanca-500x500px.png') center / contain no-repeat;
+  transform-origin: 34% 62%;
+  animation: srSweep 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.15s both;
+}
+
+@keyframes srSplashBg {
+  0%,
+  69% {
+    background-color: #06200f;
+  }
+  100% {
+    background-color: #185638;
+  }
+}
+
+@keyframes srPatternIn {
+  0%,
+  69% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes srSplashOut {
+  0%,
+  84% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes srIconIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-420px) scale(0.72, 1.34);
+  }
+  34% {
+    opacity: 1;
+    transform: translateY(0) scale(1.3, 0.7);
+  }
+  46% {
+    transform: translateY(-150px) scale(0.88, 1.16);
+  }
+  60% {
+    transform: translateY(0) scale(1.18, 0.84);
+  }
+  72% {
+    transform: translateY(-56px) scale(0.95, 1.06);
+  }
+  84% {
+    transform: translateY(0) scale(1.1, 0.92);
+  }
+  92% {
+    transform: translateY(-16px) scale(0.99, 1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+@keyframes srRing {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes srSweep {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes srRise {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes srPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .login__card {
+    padding: 34px 24px;
+  }
+
+  .login__titulo {
+    font-size: 26px;
+  }
+
+  .login__input,
+  .login__entrar {
+    height: 64px;
+  }
+
+  .login__entrar {
+    font-size: 19px;
+  }
+}
+
+// Sin animaciones: el formulario aparece directamente.
+@media (prefers-reduced-motion: reduce) {
+  .login__logo,
+  .login__card {
+    animation: none;
+  }
+}

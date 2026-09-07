@@ -1,27 +1,76 @@
-<div class="smartrest-fondo-background"></div>
-<div class="smartrest-fondo"></div>
+<div class="login">
+  <div class="login__pattern" aria-hidden="true"></div>
+  <div class="login__brillo" aria-hidden="true"></div>
 
-  <div class="smartrest-login-card-container">
-   
-   
-    <div class="smartrest-logo-verde" aria-label="Smartrest"></div>
+  <div class="login__contenido">
+    <div class="login__logo" role="img" aria-label="SmartRest"></div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" style="display: grid; gap: 12px">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" />
-      </mat-form-field>
+    <form class="login__card" [formGroup]="form" (ngSubmit)="submit()">
+      <h1 class="login__titulo">Iniciar sesión</h1>
+      <p class="login__subtitulo">Accede con tu cuenta de trabajo. Te llevamos a tu puesto.</p>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" />
-      </mat-form-field>
+      <div class="login__campos">
+        <label class="login__campo">
+          <span class="sr-num login__etiqueta">EMAIL</span>
+          <input class="login__input" type="email" formControlName="email" autocomplete="username" />
+        </label>
 
-      <button mat-raised-button color="primary" type="submit">Entrar</button>
-
-      <div *ngIf="error" style="color: #b00020">
-        {{ error }}
+        <label class="login__campo">
+          <span class="sr-num login__etiqueta">PASSWORD</span>
+          <span class="login__password">
+            <input
+              class="login__input"
+              [type]="tipoPassword"
+              formControlName="password"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="login__ojo"
+              (click)="alternarPassword()"
+              [attr.aria-label]="verPass ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              @if (verPass) {
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"></path>
+                  <circle cx="12" cy="12" r="3.1"></circle>
+                </svg>
+              } @else {
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 10.5c1.9 2.6 5 4.8 9 4.8s7.1-2.2 9-4.8"></path>
+                  <path d="m5 14.4-1.7 2.4"></path>
+                  <path d="M9.4 16.6 8.7 19.4"></path>
+                  <path d="m14.6 16.6.7 2.8"></path>
+                  <path d="m19 14.4 1.7 2.4"></path>
+                </svg>
+              }
+            </button>
+          </span>
+        </label>
       </div>
+
+      <button type="submit" class="sr-btn sr-btn--principal login__entrar">Entrar</button>
+
+      @if (error) {
+        <div class="login__error" role="alert">
+          <span class="login__error-punto" aria-hidden="true"></span>
+          <span class="login__error-texto">{{ error }}</span>
+        </div>
+      }
     </form>
   </div>
 
+  @if (mostrarSplash) {
+    <div class="login__splash" aria-hidden="true">
+      <div class="login__splash-pattern"></div>
+      <div class="login__splash-marca">
+        <span class="login__anillo"></span>
+        <span class="login__anillo login__anillo--tardio"></span>
+        <span class="login__icono"></span>
+        <span class="login__marca"></span>
+      </div>
+    </div>
+  }
+</div>
