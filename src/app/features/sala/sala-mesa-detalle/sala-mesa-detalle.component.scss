@@ -524,17 +524,74 @@
 @media (max-width: 600px) {
   .mesa__volver,
   .mesa__ficha,
-  .mesa__categorias {
-    padding-inline: 16px;
-  }
-
+  .mesa__categorias,
   .mesa__contenido,
   .mesa__pie {
     padding-inline: 16px;
   }
 
+  // La cabecera de la mesa es contexto, no accion: en movil se comprime al
+  // maximo para dejar el alto al catalogo y a la barra de cuenta.
+  .mesa__volver {
+    padding-top: 12px;
+  }
+
+  .mesa__volver-btn {
+    height: 44px;
+    padding: 0 16px;
+    font-size: 15px;
+  }
+
+  .mesa__ficha {
+    gap: 12px;
+    padding-block: 12px;
+    margin-top: 10px;
+  }
+
+  .mesa__ficha-numero {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--sr-r-s);
+    font-size: 20px;
+  }
+
   .mesa__ficha-titulo {
-    font-size: 22px;
+    font-size: 17px;
+  }
+
+  .mesa__ficha-meta {
+    margin-top: 2px;
+    font-size: 12px;
+  }
+
+  .mesa__ficha-chip {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .mesa__observaciones {
+    gap: 8px;
+    margin: 10px 16px 0;
+    padding: 8px 12px;
+  }
+
+  .mesa__observaciones-etiqueta {
+    font-size: 10px;
+  }
+
+  .mesa__observaciones-texto {
+    font-size: 13px;
+  }
+
+  // Pestanas de categoria mas bajas: el componente las fija a 72px y eso
+  // pisaba la reduccion que .sr-tab ya hace en movil.
+  .mesa__categorias {
+    padding-top: 14px;
+  }
+
+  .mesa__categoria {
+    height: 56px;
+    min-width: 104px;
   }
 
   .mesa__comensales {
