@@ -71,7 +71,7 @@ body {
 }
 
 .smartrest-toolbar {
-  height: 8vh !important;
+  flex: none;
   background-color: #10432a !important;
   display: flex;
   flex-direction: row;
