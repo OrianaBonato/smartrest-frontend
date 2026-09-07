@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDEFE9;font-family:Figtree,system-ui,sans-serif}
+a{color:#185638}a:hover{color:#0E3A24}
+.dv-turn{padding:44px 48px 36px;border-bottom:1px solid rgba(14,58,36,.10);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 22px}
+.dv-tid{font:300 10px 'Space Grotesk',sans-serif;padding:4px 8px;background:#0E3A24;color:#fff;border-radius:5px;text-decoration:none}
+.dv-tname{font:700 14px/1.2 Figtree,sans-serif;color:#0E3A24}
+.dv-opts{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.dv-oid{font:300 10.5px 'Space Grotesk',sans-serif;padding:4px 8px;background:rgba(14,58,36,.10);color:#0E3A24;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:9px;font:500 12.5px/1.3 Figtree,sans-serif;color:rgba(18,26,21,.6)}
+.dv-card{background:#fff;border:1px solid rgba(14,58,36,.10);border-radius:14px;box-shadow:0 8px 24px rgba(14,58,36,.08);overflow:hidden}
+.dv-opt:target .dv-oid{background:#185638;color:#fff}
+.dv-next{margin:26px 0 0;font:12.5px/1.6 Figtree,sans-serif;color:rgba(18,26,21,.55)}
+@keyframes srSplashBg{0%,69%{background-color:#06200F}100%{background-color:#185638}}
+@keyframes srPatternIn{0%,69%{opacity:0}100%{opacity:.2}}
+@keyframes srSplashOut{0%,84%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+@keyframes srIconIn{0%{opacity:0;transform:translateY(-420px) scale(.72,1.34)}34%{opacity:1;transform:translateY(0) scale(1.3,.7)}46%{transform:translateY(-150px) scale(.88,1.16)}60%{transform:translateY(0) scale(1.18,.84)}72%{transform:translateY(-56px) scale(.95,1.06)}84%{transform:translateY(0) scale(1.1,.92)}92%{transform:translateY(-16px) scale(.99,1.01)}100%{opacity:1;transform:translateY(0) scale(1,1)}}
+@keyframes srRing{0%{transform:scale(.35);opacity:.7}100%{transform:scale(2);opacity:0}}
+@keyframes srSweep{0%{opacity:0;transform:translateY(26px) scale(.7)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes srRise{0%{opacity:0}100%{opacity:1}}
+@keyframes srPop{0%{opacity:0;transform:scale(.9)}70%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+@keyframes srSheetUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
+@keyframes srScrim{0%{opacity:0}100%{opacity:1}}
+@keyframes srHalo{0%{transform:scale(.86);opacity:.95}55%{transform:scale(1.24);opacity:.38}100%{transform:scale(1.06);opacity:.8}}
+@keyframes srNudge{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes srFadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes srPulse{0%,100%{opacity:.35}50%{opacity:1}}
+</style></helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">SALA</a><span class="dv-tname">Flujo del camarero · mesas → abrir mesa → comandero y cuenta</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Sala · agrupada por estado</div>
+<div class="dv-card" style="width:820px">
+<div style="width:820px;height:1180px;background:#F7F9F5;display:flex;flex-direction:column;overflow:hidden">
+<div style="height:88px;background:#10432A;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex:none">
+<div style="display:flex;align-items:center;gap:16px">
+<img src="assets/marca-blanca.png" alt="SmartRest" style="height:44px;object-fit:contain">
+<span style="padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.14);font:300 13px 'Space Grotesk',sans-serif;color:#fff;letter-spacing:.06em">SALA</span>
+</div>
+<div style="display:flex;align-items:center;gap:14px">
+<span style="font:600 15px Figtree,sans-serif;color:rgba(255,255,255,.75)">Marta R.</span>
+<button style="height:56px;padding:0 24px;border:0;border-radius:16px;background:rgba(255,255,255,.16);color:#fff;font:700 16px Figtree,sans-serif;cursor:pointer" style-hover="background:rgba(255,255,255,.28)">Salir</button>
+</div>
+</div>
+
+<div style="padding:26px 24px 0;flex:none">
+<div style="display:flex;align-items:flex-end;justify-content:space-between">
+<div>
+<div style="font:800 34px/1.05 Figtree,sans-serif;color:#0E3A24;letter-spacing:-.02em">Mesas</div>
+<div style="font:500 16px Figtree,sans-serif;color:#5C6B60;margin-top:7px">4 en servicio · 4 libres · 2 avisos de cocina</div>
+</div>
+<button style="height:64px;padding:0 24px;border:2px solid rgba(14,58,36,.16);border-radius:18px;background:#fff;font:700 16px Figtree,sans-serif;color:#185638;cursor:pointer" style-hover="border-color:#185638">Actualizar</button>
+</div>
+</div>
+
+<div style="flex:1;overflow:hidden;padding:24px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+<span style="width:12px;height:12px;border-radius:50%;background:#185638"></span>
+<span style="font:300 13px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.08em">EN SERVICIO · 4</span>
+<span style="flex:1;height:1px;background:rgba(14,58,36,.12)"></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<sc-for list="{{ ocupadas }}" as="m" hint-placeholder-count="4">
+<div style="background:#fff;border:2px solid rgba(24,86,56,.22);border-radius:24px;padding:20px;box-shadow:0 6px 18px rgba(14,58,36,.10);cursor:pointer" style-hover="border-color:#185638;transform:translateY(-2px)">
+<div style="display:flex;align-items:flex-start;justify-content:space-between">
+<div>
+<div style="font:300 40px/1 'Space Grotesk',sans-serif;color:#0E3A24">{{ m.numero }}</div>
+<div style="font:600 14px Figtree,sans-serif;color:#5C6B60;margin-top:6px">{{ m.comensales }} de {{ m.capacidad }} pax</div>
+</div>
+<span style="padding:8px 14px;border-radius:999px;background:#E4F0E8;font:300 12px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.05em">{{ m.tiempo }}</span>
+</div>
+<div style="display:flex;align-items:center;gap:8px;margin:16px 0 14px;flex-wrap:wrap">
+<span style="position:relative;display:inline-flex">
+<sc-if value="{{ m.listo }}" hint-placeholder-val="{{ false }}">
+<span style="position:absolute;inset:-5px;border-radius:14px;background:#12C065;filter:blur(8px);animation:srHalo 1.5s ease-in-out infinite"></span>
+</sc-if>
+<span style="position:relative;padding:8px 12px;border-radius:10px;background:{{ m.avisoBg }};font:700 13px Figtree,sans-serif;color:{{ m.avisoFg }}">{{ m.aviso }}</span>
+</span>
+<span style="font:300 17px 'Space Grotesk',sans-serif;color:#0E3A24;margin-left:auto">{{ m.total }}</span>
+</div>
+<button style="width:100%;height:68px;border:0;border-radius:18px;background:#185638;color:#fff;font:800 19px Figtree,sans-serif;cursor:pointer" style-hover="background:#0E3A24">Entrar</button>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;margin:30px 0 14px">
+<span style="width:12px;height:12px;border-radius:50%;background:#A9B4AC"></span>
+<span style="font:300 13px 'Space Grotesk',sans-serif;color:#5C6B60;letter-spacing:.08em">LIBRES · 4</span>
+<span style="flex:1;height:1px;background:rgba(14,58,36,.12)"></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<sc-for list="{{ libres }}" as="m" hint-placeholder-count="4">
+<div style="background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:24px;padding:20px;display:flex;align-items:center;gap:18px;cursor:pointer" style-hover="border-color:#185638;background:#FBFDF9">
+<div style="width:72px;height:72px;border-radius:18px;background:#F1F3EE;display:grid;place-items:center;font:300 30px 'Space Grotesk',sans-serif;color:#5C6B60;flex:none">{{ m.numero }}</div>
+<div style="flex:1">
+<div style="font:700 18px Figtree,sans-serif;color:#0E3A24">Libre</div>
+<div style="font:600 14px Figtree,sans-serif;color:#5C6B60;margin-top:4px">Capacidad {{ m.capacidad }} · {{ m.zona }}</div>
+</div>
+<button style="height:64px;padding:0 22px;border:2px solid rgba(14,58,36,.18);border-radius:16px;background:#fff;font:700 16px Figtree,sans-serif;color:#185638;cursor:pointer;flex:none" style-hover="background:#185638;color:#fff;border-color:#185638">Abrir</button>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1e">
+<div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Abrir mesa · comensales y observaciones (interactivo)</div>
+<div class="dv-card" style="width:820px">
+<div style="width:820px;height:1180px;background:#F7F9F5;display:flex;flex-direction:column;overflow:hidden">
+<div style="height:88px;background:#10432A;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex:none">
+<button style="height:60px;padding:0 22px;border:0;border-radius:16px;background:rgba(255,255,255,.14);color:#fff;font:700 16px Figtree,sans-serif;cursor:pointer;display:flex;align-items:center;gap:10px" style-hover="background:rgba(255,255,255,.26)"><span style="font-size:20px">←</span>Mesas</button>
+<img src="assets/marca-blanca.png" alt="SmartRest" style="height:40px;object-fit:contain">
+<button style="height:60px;padding:0 22px;border:0;border-radius:16px;background:rgba(255,255,255,.14);color:#fff;font:700 16px Figtree,sans-serif;cursor:pointer" style-hover="background:rgba(255,255,255,.26)">Salir</button>
+</div>
+
+<div style="background:#fff;padding:26px 24px;border-bottom:1px solid rgba(14,58,36,.10);flex:none;display:flex;align-items:center;gap:18px">
+<div style="width:78px;height:78px;border-radius:22px;background:#F1F3EE;display:grid;place-items:center;font:300 32px 'Space Grotesk',sans-serif;color:#5C6B60;flex:none">04</div>
+<div style="flex:1">
+<div style="font:800 28px/1.1 Figtree,sans-serif;color:#0E3A24;letter-spacing:-.02em">Abrir mesa 4</div>
+<div style="font:600 15px Figtree,sans-serif;color:#5C6B60;margin-top:6px">Libre · capacidad 6 · Interior</div>
+</div>
+</div>
+
+<div style="flex:1;overflow:auto;padding:26px 24px">
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+<span style="width:34px;height:34px;border-radius:50%;background:#185638;color:#fff;display:grid;place-items:center;font:300 16px 'Space Grotesk',sans-serif;flex:none">1</span>
+<span style="font:800 22px Figtree,sans-serif;color:#0E3A24">¿Cuántos comensales?</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+<sc-for list="{{ opcionesComensales }}" as="c" hint-placeholder-count="8">
+<button onClick="{{ c.select }}" style="height:104px;border:2px solid {{ c.border }};border-radius:22px;background:{{ c.bg }};color:{{ c.fg }};font:300 34px 'Space Grotesk',sans-serif;cursor:pointer;box-shadow:{{ c.shadow }}">{{ c.label }}</button>
+</sc-for>
+</div>
+
+<div style="display:flex;align-items:center;gap:14px;margin:34px 0 18px">
+<span style="width:34px;height:34px;border-radius:50%;background:{{ paso2Bg }};color:{{ paso2Fg }};display:grid;place-items:center;font:300 16px 'Space Grotesk',sans-serif;flex:none">2</span>
+<span style="font:800 22px Figtree,sans-serif;color:{{ paso2Titulo }}">Observaciones</span>
+<span style="font:600 14px Figtree,sans-serif;color:#8A9990">opcional</span>
+</div>
+
+<sc-if value="{{ sinComensales }}" hint-placeholder-val="{{ true }}">
+<div style="border:2px dashed rgba(14,58,36,.16);border-radius:22px;padding:34px 24px;text-align:center;font:600 17px Figtree,sans-serif;color:#8A9990">Elige primero el número de comensales</div>
+</sc-if>
+<sc-if value="{{ conComensales }}" hint-placeholder-val="{{ false }}">
+<div>
+<textarea value="{{ observaciones }}" onChange="{{ setObservaciones }}" placeholder="Alergias, sillas de bebé, celebración, mesa juntada..." style="width:100%;min-height:150px;box-sizing:border-box;border:2px solid rgba(14,58,36,.16);border-radius:22px;background:#fff;padding:20px 22px;font:500 18px/1.5 Figtree,sans-serif;color:#121A15;outline:none;resize:none" style-focus="border-color:#185638"></textarea>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
+<sc-for list="{{ atajos }}" as="a" hint-placeholder-count="4">
+<button onClick="{{ a.add }}" style="height:56px;padding:0 20px;border:2px solid rgba(14,58,36,.14);border-radius:999px;background:#fff;font:700 15px Figtree,sans-serif;color:#185638;cursor:pointer" style-hover="background:#E4F0E8;border-color:#185638">{{ a.texto }}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="flex:none;background:#fff;border-top:1px solid rgba(14,58,36,.12);box-shadow:0 -14px 34px rgba(14,58,36,.10);padding:20px 24px 24px">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+<span style="font:300 12px 'Space Grotesk',sans-serif;color:#8A9990;letter-spacing:.08em">RESUMEN</span>
+<span style="font:600 16px Figtree,sans-serif;color:#5C6B60">{{ resumen }}</span>
+</div>
+<button onClick="{{ continuar }}" style="width:100%;height:88px;border:0;border-radius:24px;background:{{ continuarBg }};color:{{ continuarFg }};font:800 23px Figtree,sans-serif;cursor:{{ continuarCursor }};box-shadow:{{ continuarShadow }}" style-active="transform:translateY(2px)">Continuar</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Comandero · abre en Bebidas; desliza la cuenta hacia arriba</div>
+<div class="dv-card" style="width:820px">
+<div style="width:820px;height:1180px;background:#F7F9F5;display:flex;flex-direction:column;overflow:hidden;position:relative">
+<div style="height:88px;background:#10432A;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex:none">
+<button style="height:60px;padding:0 22px;border:0;border-radius:16px;background:rgba(255,255,255,.14);color:#fff;font:700 16px Figtree,sans-serif;cursor:pointer;display:flex;align-items:center;gap:10px" style-hover="background:rgba(255,255,255,.26)"><span style="font-size:20px">←</span>Mesas</button>
+<img src="assets/marca-blanca.png" alt="SmartRest" style="height:40px;object-fit:contain">
+<button style="height:60px;padding:0 22px;border:0;border-radius:16px;background:rgba(255,255,255,.14);color:#fff;font:700 16px Figtree,sans-serif;cursor:pointer" style-hover="background:rgba(255,255,255,.26)">Salir</button>
+</div>
+
+<div style="background:#fff;padding:22px 24px;border-bottom:1px solid rgba(14,58,36,.10);flex:none">
+<div style="display:flex;align-items:center;gap:18px">
+<div style="width:78px;height:78px;border-radius:22px;background:#185638;display:grid;place-items:center;font:300 32px 'Space Grotesk',sans-serif;color:#fff;flex:none">03</div>
+<div style="flex:1">
+<div style="font:800 28px/1.1 Figtree,sans-serif;color:#0E3A24;letter-spacing:-.02em">Mesa 3 · Capacidad 4</div>
+<div style="font:600 15px Figtree,sans-serif;color:#5C6B60;margin-top:6px">Servicio #1042 · 4 comensales · desde 21:15</div>
+</div>
+<span style="padding:12px 18px;border-radius:999px;background:#E4F0E8;font:300 14px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.05em;flex:none">ABIERTO</span>
+</div>
+<div style="margin-top:16px;display:flex;align-items:center;gap:12px;background:#FDF1DF;border-radius:14px;padding:14px 18px">
+<span style="font:300 12px 'Space Grotesk',sans-serif;color:#B8710A;letter-spacing:.06em">OBSERVACIONES</span>
+<span style="font:600 16px Figtree,sans-serif;color:#7A4B06">Sin gluten en el segundo plato</span>
+</div>
+</div>
+
+<div style="display:flex;gap:10px;padding:20px 24px 0;flex:none;overflow:hidden">
+<sc-for list="{{ categorias }}" as="c" hint-placeholder-count="4">
+<button onClick="{{ c.select }}" style="flex:1;height:72px;border:2px solid {{ c.border }};border-radius:20px;background:{{ c.bg }};color:{{ c.fg }};font:700 17px Figtree,sans-serif;cursor:pointer">{{ c.nombre }}</button>
+</sc-for>
+</div>
+
+<div style="flex:1;overflow:auto;padding:20px 24px 0">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<sc-for list="{{ productos }}" as="p" hint-placeholder-count="4">
+<button onClick="{{ p.add }}" style="text-align:left;background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:22px;padding:20px;min-height:120px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:12px" style-hover="border-color:#185638;box-shadow:0 6px 18px rgba(14,58,36,.10)" style-active="transform:scale(.98)">
+<div style="font:700 19px/1.3 Figtree,sans-serif;color:#0E3A24">{{ p.nombre }}</div>
+<div style="display:flex;align-items:center;justify-content:space-between">
+<span style="font:300 20px 'Space Grotesk',sans-serif;color:#185638">{{ p.precioFmt }}</span>
+<span style="display:flex;align-items:center;gap:10px">
+<span style="font:300 11px 'Space Grotesk',sans-serif;color:#8A9990;letter-spacing:.06em">{{ p.destino }}</span>
+<span style="width:44px;height:44px;border-radius:14px;background:#E4F0E8;display:grid;place-items:center;font:700 24px Figtree,sans-serif;color:#185638">+</span>
+</span>
+</div>
+</button>
+</sc-for>
+</div>
+
+<div style="margin-top:26px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+<span style="font:300 13px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.08em">EN COCINA Y BARRA</span>
+<span style="flex:1;height:1px;background:rgba(14,58,36,.12)"></span>
+</div>
+<div style="display:grid;gap:12px">
+<sc-for list="{{ pendientes }}" as="l" hint-placeholder-count="3">
+<div style="background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:18px;padding:16px 20px;display:flex;align-items:center;gap:16px">
+<span style="width:52px;height:52px;border-radius:14px;background:#F1F3EE;display:grid;place-items:center;font:300 18px 'Space Grotesk',sans-serif;color:#0E3A24;flex:none">{{ l.cantidad }}</span>
+<div style="flex:1">
+<div style="font:700 18px Figtree,sans-serif;color:#0E3A24">{{ l.productoNombre }}</div>
+<div style="font:300 13px 'Space Grotesk',sans-serif;color:#8A9990;margin-top:4px">{{ l.cantidad }} uds · {{ l.destino }}</div>
+</div>
+<span style="padding:10px 16px;border-radius:999px;background:{{ l.bg }};font:300 13px 'Space Grotesk',sans-serif;color:{{ l.fg }};letter-spacing:.04em;flex:none">{{ l.estado }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="height:24px"></div>
+</div>
+
+<div style="flex:none;background:#fff;border-top:1px solid rgba(14,58,36,.12);box-shadow:0 -14px 34px rgba(14,58,36,.10);padding:18px 24px 22px">
+<div onPointerDown="{{ dragStart }}" onPointerUp="{{ dragEnd }}" onClick="{{ abrirCuenta }}" style="margin-bottom:16px;border-radius:20px;background:#0E3A24;padding:14px 22px 18px;cursor:grab;touch-action:none;user-select:none" style-hover="background:#185638">
+<div style="width:64px;height:5px;border-radius:99px;background:rgba(255,255,255,.45);margin:0 auto 12px;animation:srNudge 2.4s ease-in-out infinite"></div>
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div>
+<div style="font:300 12px 'Space Grotesk',sans-serif;color:rgba(255,255,255,.65);letter-spacing:.08em">CUENTA · DESLIZA PARA ABRIR</div>
+<div style="font:600 15px Figtree,sans-serif;color:rgba(255,255,255,.85);margin-top:5px">{{ lineasCount }} productos · dividir, quitar o cobrar</div>
+</div>
+<span style="font:300 26px 'Space Grotesk',sans-serif;color:#fff">{{ total }}</span>
+</div>
+</div>
+<sc-if value="{{ carritoVacio }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;gap:14px;height:76px;border-radius:20px;background:#F1F3EE;padding:0 22px">
+<span style="font:600 17px Figtree,sans-serif;color:#5C6B60">Toca un producto para empezar la comanda</span>
+</div>
+</sc-if>
+<sc-if value="{{ carritoLleno }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="display:grid;gap:10px;max-height:214px;overflow:auto;margin-bottom:16px">
+<sc-for list="{{ carrito }}" as="i" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:14px;background:#F7F9F5;border-radius:18px;padding:12px 14px">
+<div style="flex:1">
+<div style="font:700 18px Figtree,sans-serif;color:#0E3A24">{{ i.nombre }}</div>
+<div style="font:300 14px 'Space Grotesk',sans-serif;color:#8A9990;margin-top:3px">{{ i.precioFmt }}</div>
+</div>
+<button onClick="{{ i.dec }}" style="width:60px;height:60px;border:2px solid rgba(14,58,36,.18);border-radius:16px;background:#fff;font:700 26px Figtree,sans-serif;color:#185638;cursor:pointer" style-hover="border-color:#185638">−</button>
+<span style="min-width:44px;text-align:center;font:300 24px 'Space Grotesk',sans-serif;color:#0E3A24">{{ i.cantidad }}</span>
+<button onClick="{{ i.inc }}" style="width:60px;height:60px;border:0;border-radius:16px;background:#185638;font:700 26px Figtree,sans-serif;color:#fff;cursor:pointer" style-hover="background:#0E3A24">+</button>
+</div>
+</sc-for>
+</div>
+<button onClick="{{ enviar }}" style="width:100%;height:86px;border:0;border-radius:22px;background:#185638;color:#fff;font:800 22px Figtree,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:16px;box-shadow:0 10px 26px rgba(24,86,56,.30)" style-hover="background:#0E3A24" style-active="transform:translateY(2px)">
+<span>Enviar comandas</span>
+<span style="padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.20);font:300 18px 'Space Grotesk',sans-serif">{{ carritoCount }}</span>
+</button>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ cuentaAbierta }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20">
+<div onClick="{{ cerrarCuenta }}" style="position:absolute;inset:0;background:rgba(6,20,12,.55);animation:srScrim .25s ease both"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;top:56px;background:#F7F9F5;border-radius:34px 34px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:srSheetUp .42s cubic-bezier(.2,.9,.24,1) both;box-shadow:0 -20px 60px rgba(6,20,12,.4)">
+<div onPointerDown="{{ dragStart }}" onPointerUp="{{ dragEndClose }}" style="padding:16px 0 10px;cursor:grab;touch-action:none;flex:none">
+<div style="width:76px;height:6px;border-radius:99px;background:rgba(14,58,36,.22);margin:0 auto"></div>
+</div>
+
+<div style="padding:8px 28px 20px;flex:none;display:flex;align-items:center;justify-content:space-between">
+<div>
+<div style="font:800 32px/1.1 Figtree,sans-serif;color:#0E3A24;letter-spacing:-.02em">Cuenta · Mesa 3</div>
+<div style="font:600 15px Figtree,sans-serif;color:#5C6B60;margin-top:6px">Servicio #1042 · 4 comensales · desde 21:15</div>
+</div>
+<button onClick="{{ cerrarCuenta }}" style="width:64px;height:64px;border:2px solid rgba(14,58,36,.16);border-radius:20px;background:#fff;font:700 24px Figtree,sans-serif;color:#5C6B60;cursor:pointer" style-hover="border-color:#185638;color:#185638">✕</button>
+</div>
+
+<div style="flex:1;overflow:auto;padding:0 28px">
+<div style="background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:24px;padding:10px 20px">
+<sc-for list="{{ cuentaLineas }}" as="l" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(14,58,36,.08)">
+<span style="width:52px;height:52px;border-radius:15px;background:#F1F3EE;display:grid;place-items:center;font:300 19px 'Space Grotesk',sans-serif;color:#0E3A24;flex:none">{{ l.cantidad }}</span>
+<div style="flex:1;min-width:0">
+<div style="font:700 18px Figtree,sans-serif;color:#0E3A24">{{ l.productoNombre }}</div>
+<div style="font:300 13px 'Space Grotesk',sans-serif;color:#8A9990;margin-top:4px">{{ l.detalle }}</div>
+</div>
+<span style="font:300 19px 'Space Grotesk',sans-serif;color:#0E3A24;flex:none">{{ l.subtotal }}</span>
+<button onClick="{{ l.quitar }}" style="width:56px;height:56px;border:2px solid rgba(186,26,26,.22);border-radius:16px;background:#fff;font:700 15px Figtree,sans-serif;color:#BA1A1A;cursor:pointer;flex:none" style-hover="background:#BA1A1A;color:#fff;border-color:#BA1A1A">Quitar</button>
+</div>
+</sc-for>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 0 18px">
+<span style="font:800 22px Figtree,sans-serif;color:#0E3A24">Total</span>
+<span style="font:300 32px 'Space Grotesk',sans-serif;color:#185638">{{ total }}</span>
+</div>
+</div>
+
+<div style="background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:24px;padding:22px;margin-top:16px">
+<div style="font:300 13px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.08em">DIVIDIR CUENTA</div>
+<div style="display:flex;align-items:center;gap:16px;margin-top:18px">
+<button onClick="{{ menosPartes }}" style="width:68px;height:68px;border:2px solid rgba(14,58,36,.18);border-radius:20px;background:#fff;font:700 28px Figtree,sans-serif;color:#185638;cursor:pointer" style-hover="border-color:#185638">−</button>
+<div style="flex:1;text-align:center">
+<div style="font:300 34px/1 'Space Grotesk',sans-serif;color:#0E3A24">{{ partes }}</div>
+<div style="font:600 14px Figtree,sans-serif;color:#5C6B60;margin-top:6px">partes iguales</div>
+</div>
+<button onClick="{{ masPartes }}" style="width:68px;height:68px;border:0;border-radius:20px;background:#185638;font:700 28px Figtree,sans-serif;color:#fff;cursor:pointer" style-hover="background:#0E3A24">+</button>
+<div style="min-width:170px;text-align:right;padding-left:8px;border-left:1px solid rgba(14,58,36,.10)">
+<div style="font:300 12px 'Space Grotesk',sans-serif;color:#8A9990;letter-spacing:.06em">CADA UNO</div>
+<div style="font:300 28px 'Space Grotesk',sans-serif;color:#185638;margin-top:6px">{{ porParte }}</div>
+</div>
+</div>
+<button style="width:100%;height:68px;margin-top:18px;border:2px solid rgba(14,58,36,.18);border-radius:20px;background:#fff;font:700 17px Figtree,sans-serif;color:#185638;cursor:pointer" style-hover="background:#E4F0E8;border-color:#185638">Dividir por productos</button>
+</div>
+
+<div style="background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:24px;padding:22px;margin:16px 0 24px">
+<div style="font:300 13px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.08em">FORMA DE PAGO</div>
+<div style="display:flex;gap:12px;margin-top:18px">
+<sc-for list="{{ metodos }}" as="m" hint-placeholder-count="3">
+<button onClick="{{ m.select }}" style="flex:1;height:76px;border:2px solid {{ m.border }};border-radius:20px;background:{{ m.bg }};color:{{ m.fg }};font:700 18px Figtree,sans-serif;cursor:pointer">{{ m.nombre }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="flex:none;background:#fff;border-top:1px solid rgba(14,58,36,.12);padding:18px 28px 24px;display:grid;gap:12px">
+<button style="width:100%;height:88px;border:0;border-radius:24px;background:#185638;color:#fff;font:800 23px Figtree,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:14px;box-shadow:0 10px 26px rgba(24,86,56,.30)" style-hover="background:#0E3A24" style-active="transform:translateY(2px)">Cobrar {{ total }}</button>
+<button style="width:100%;height:68px;border:2px solid rgba(14,58,36,.18);border-radius:20px;background:#fff;font:700 17px Figtree,sans-serif;color:#5C6B60;cursor:pointer" style-hover="border-color:#185638;color:#185638">Cerrar servicio</button>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Orden del flujo: <a class="dv-oid" href="#1b">1b</a> mesas · <a class="dv-oid" href="#1e">1e</a> abrir mesa · <a class="dv-oid" href="#1d">1d</a> comandero, con la cuenta deslizable.</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:2700,&quot;height&quot;:1400}}">
+class Component extends DCLogic {
+  state = {
+    splash: true,
+    cat: 'Bebidas',
+    comensales: 0,
+    observaciones: '',
+    carrito: [],
+    pendientes: [
+      { idLinea: 1, productoNombre: 'Croquetas de jamón', cantidad: 2, destino: 'COCINA', estado: 'EN_PREPARACION' },
+      { idLinea: 2, productoNombre: 'Copa de Rioja', cantidad: 4, destino: 'BARRA', estado: 'LISTO' },
+      { idLinea: 3, productoNombre: 'Solomillo a la pimienta', cantidad: 2, destino: 'COCINA', estado: 'PENDIENTE' }
+    ],
+    lineas: [
+      { idLinea: 1, productoNombre: 'Croquetas de jamón', cantidad: 2, precioUnitario: 9.5 },
+      { idLinea: 2, productoNombre: 'Copa de Rioja', cantidad: 4, precioUnitario: 4.5 },
+      { idLinea: 3, productoNombre: 'Solomillo a la pimienta', cantidad: 2, precioUnitario: 22 },
+      { idLinea: 4, productoNombre: 'Agua mineral', cantidad: 2, precioUnitario: 2.2 }
+    ]
+  };
+
+  catalogo = [
+    { idProducto: 1, nombre: 'Croquetas de jamón', precio: 9.5, cat: 'Entrantes', destino: 'COCINA' },
+    { idProducto: 2, nombre: 'Ensalada de burrata', precio: 12, cat: 'Entrantes', destino: 'COCINA' },
+    { idProducto: 3, nombre: 'Pulpo a la brasa', precio: 18.5, cat: 'Entrantes', destino: 'COCINA' },
+    { idProducto: 4, nombre: 'Tabla de quesos', precio: 14, cat: 'Entrantes', destino: 'COCINA' },
+    { idProducto: 5, nombre: 'Solomillo a la pimienta', precio: 22, cat: 'Principales', destino: 'COCINA' },
+    { idProducto: 6, nombre: 'Risotto de setas', precio: 16.5, cat: 'Principales', destino: 'COCINA' },
+    { idProducto: 7, nombre: 'Lubina a la sal', precio: 21, cat: 'Principales', destino: 'COCINA' },
+    { idProducto: 8, nombre: 'Hamburguesa Smart', precio: 14.5, cat: 'Principales', destino: 'COCINA' },
+    { idProducto: 9, nombre: 'Tarta de queso', precio: 6.5, cat: 'Postres', destino: 'COCINA' },
+    { idProducto: 10, nombre: 'Coulant de chocolate', precio: 7, cat: 'Postres', destino: 'COCINA' },
+    { idProducto: 11, nombre: 'Copa de Rioja', precio: 4.5, cat: 'Bebidas', destino: 'BARRA' },
+    { idProducto: 12, nombre: 'Caña', precio: 2.8, cat: 'Bebidas', destino: 'BARRA' },
+    { idProducto: 13, nombre: 'Agua mineral', precio: 2.2, cat: 'Bebidas', destino: 'BARRA' },
+    { idProducto: 14, nombre: 'Café solo', precio: 1.8, cat: 'Bebidas', destino: 'BARRA' }
+  ];
+
+  mesas = [
+    { idMesa: 1, numero: '01', capacidad: 2, estado: 'LIBRE', zona: 'Interior' },
+    { idMesa: 2, numero: '02', capacidad: 2, estado: 'OCUPADA', zona: 'Interior', comensales: 2, tiempo: '00:24', total: '31,80 €', aviso: '2 en preparación', avisoBg: '#FDF1DF', avisoFg: '#8A5406' },
+    { idMesa: 3, numero: '03', capacidad: 4, estado: 'OCUPADA', zona: 'Interior', comensales: 4, tiempo: '00:38', total: '86,50 €', aviso: 'Listo para servir', avisoBg: '#E2F7EA', avisoFg: '#147443' },
+    { idMesa: 4, numero: '04', capacidad: 6, estado: 'LIBRE', zona: 'Interior' },
+    { idMesa: 5, numero: '05', capacidad: 2, estado: 'OCUPADA', zona: 'Terraza', comensales: 2, tiempo: '01:02', total: '24,00 €', aviso: 'Pendiente de cuenta', avisoBg: '#F1F3EE', avisoFg: '#5C6B60' },
+    { idMesa: 6, numero: '06', capacidad: 4, estado: 'LIBRE', zona: 'Terraza' },
+    { idMesa: 7, numero: '07', capacidad: 8, estado: 'OCUPADA', zona: 'Terraza', comensales: 8, tiempo: '00:12', total: '142,20 €', aviso: '3 en preparación', avisoBg: '#FDF1DF', avisoFg: '#8A5406' },
+    { idMesa: 8, numero: '08', capacidad: 2, estado: 'LIBRE', zona: 'Terraza' }
+  ];
+
+  estadoColor = {
+    PENDIENTE: { bg: '#F1F3EE', fg: '#5C6B60' },
+    EN_PREPARACION: { bg: '#FDF1DF', fg: '#8A5406' },
+    LISTO: { bg: '#E2F7EA', fg: '#14743F' },
+    CANCELADO: { bg: '#FDE7E6', fg: '#8A1214' }
+  };
+
+  fmt(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+
+  dragStart = (e) => { this._y = e.clientY; };
+  dragEnd = (e) => { if (this._y != null && this._y - e.clientY > 30) this.setState({ cuentaAbierta: true }); };
+  dragEndClose = (e) => { if (this._y != null && e.clientY - this._y > 30) this.setState({ cuentaAbierta: false }); };
+  abrirCuenta = () => this.setState({ cuentaAbierta: true });
+  cerrarCuenta = () => this.setState({ cuentaAbierta: false });
+  quitarLinea = (idLinea) => this.setState((s) => ({ lineas: s.lineas.filter((l) => l.idLinea !== idLinea) }));
+
+  replay = () => {
+    this.setState({ splash: false, mostrarLogin: false });
+    setTimeout(() => this.setState({ splash: true, mostrarLogin: true }), 60);
+  };
+
+  add = (p) => this.setState((s) => {
+    const c = s.carrito.map((i) => ({ ...i }));
+    const found = c.find((i) => i.idProducto === p.idProducto);
+    if (found) found.cantidad += 1; else c.push({ ...p, cantidad: 1 });
+    return { carrito: c };
+  });
+
+  step = (p, d) => this.setState((s) => {
+    const c = s.carrito.map((i) => ({ ...i }));
+    const found = c.find((i) => i.idProducto === p.idProducto);
+    if (!found) return {};
+    found.cantidad += d;
+    return { carrito: c.filter((i) => i.cantidad > 0) };
+  });
+
+  enviar = () => this.setState((s) => {
+    let id = 100 + s.pendientes.length;
+    const nuevos = s.carrito.map((i) => ({ idLinea: ++id, productoNombre: i.nombre, cantidad: i.cantidad, destino: i.destino, estado: 'PENDIENTE' }));
+    const nuevasLineas = s.carrito.map((i) => ({ idLinea: ++id, productoNombre: i.nombre, cantidad: i.cantidad, precioUnitario: i.precio }));
+    return { carrito: [], pendientes: s.pendientes.concat(nuevos), lineas: s.lineas.concat(nuevasLineas) };
+  });
+
+  renderVals() {
+    const cat = this.state.cat;
+    const categorias = ['Bebidas', 'Entrantes', 'Principales', 'Postres'].map((nombre) => ({
+      nombre,
+      bg: nombre === cat ? '#185638' : '#fff',
+      fg: nombre === cat ? '#fff' : '#185638',
+      border: nombre === cat ? '#185638' : 'rgba(14,58,36,.16)',
+      select: () => this.setState({ cat: nombre })
+    }));
+
+    const productos = this.catalogo.filter((p) => p.cat === cat).map((p) => ({
+      nombre: p.nombre, precioFmt: this.fmt(p.precio), destino: p.destino, add: () => this.add(p)
+    }));
+
+    const carrito = this.state.carrito.map((i) => ({
+      nombre: i.nombre, cantidad: i.cantidad, precioFmt: this.fmt(i.precio),
+      inc: () => this.step(i, 1), dec: () => this.step(i, -1)
+    }));
+
+    const pendientes = this.state.pendientes.map((l) => {
+      const c = this.estadoColor[l.estado] || this.estadoColor.PENDIENTE;
+      return { productoNombre: l.productoNombre, cantidad: l.cantidad, destino: l.destino, estado: l.estado, bg: c.bg, fg: c.fg };
+    });
+
+    const lineas = this.state.lineas.map((l) => ({
+      productoNombre: l.productoNombre,
+      cantidad: l.cantidad,
+      detalle: l.cantidad + ' × ' + this.fmt(l.precioUnitario),
+      subtotal: this.fmt(l.cantidad * l.precioUnitario),
+      quitar: () => this.quitarLinea(l.idLinea)
+    }));
+
+    const totalNum = this.state.lineas.reduce((a, l) => a + l.cantidad * l.precioUnitario, 0);
+    const partes = this.state.partes || 4;
+    const metodoSel = this.state.metodo || 'Tarjeta';
+    const metodos = ['Efectivo', 'Tarjeta', 'Bizum'].map((nombre) => ({
+      nombre,
+      bg: nombre === metodoSel ? '#185638' : '#fff',
+      fg: nombre === metodoSel ? '#fff' : '#185638',
+      border: nombre === metodoSel ? '#185638' : 'rgba(14,58,36,.16)',
+      select: () => this.setState({ metodo: nombre })
+    }));
+
+    return {
+      cuentaAbierta: !!this.state.cuentaAbierta,
+      abrirCuenta: this.abrirCuenta,
+      cerrarCuenta: this.cerrarCuenta,
+      dragStart: this.dragStart,
+      dragEnd: this.dragEnd,
+      dragEndClose: this.dragEndClose,
+      cuentaLineas: lineas,
+      lineasCount: this.state.lineas.length,
+      partes,
+      porParte: this.fmt(totalNum / partes),
+      masPartes: () => this.setState((s) => ({ partes: Math.min((s.partes || 4) + 1, 12) })),
+      menosPartes: () => this.setState((s) => ({ partes: Math.max((s.partes || 4) - 1, 1) })),
+      metodos,
+      splash: this.state.splash,
+      replay: this.replay,
+      opcionesComensales: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => {
+        const on = this.state.comensales === n;
+        return {
+          label: n === 8 ? '8+' : String(n),
+          bg: on ? '#185638' : '#fff',
+          fg: on ? '#fff' : '#0E3A24',
+          border: on ? '#185638' : 'rgba(14,58,36,.14)',
+          shadow: on ? '0 8px 20px rgba(24,86,56,.28)' : '0 2px 6px rgba(14,58,36,.08)',
+          select: () => this.setState({ comensales: n })
+        };
+      }),
+      sinComensales: !this.state.comensales,
+      conComensales: !!this.state.comensales,
+      paso2Bg: this.state.comensales ? '#185638' : '#E3E7E1',
+      paso2Fg: this.state.comensales ? '#fff' : '#8A9990',
+      paso2Titulo: this.state.comensales ? '#0E3A24' : '#8A9990',
+      observaciones: this.state.observaciones,
+      setObservaciones: (e) => this.setState({ observaciones: e.target.value }),
+      atajos: ['Alergia al gluten', 'Trona para bebé', 'Cumpleaños', 'Mesa juntada'].map((texto) => ({
+        texto,
+        add: () => this.setState((s) => ({ observaciones: s.observaciones ? s.observaciones + '. ' + texto : texto }))
+      })),
+      resumen: this.state.comensales ? this.state.comensales + (this.state.comensales === 8 ? '+ comensales' : ' comensales') + (this.state.observaciones ? ' · con observaciones' : '') : 'Sin comensales seleccionados',
+      continuarBg: this.state.comensales ? '#185638' : '#E3E7E1',
+      continuarFg: this.state.comensales ? '#fff' : '#9AA79F',
+      continuarCursor: this.state.comensales ? 'pointer' : 'not-allowed',
+      continuarShadow: this.state.comensales ? '0 10px 26px rgba(24,86,56,.30)' : 'none',
+      continuar: () => {},
+      mostrarLogin: this.state.mostrarLogin !== false,
+      email: this.state.email ?? 'sala@smartrest.es',
+      password: this.state.password ?? 'smartrest',
+      passType: this.state.verPass ? 'text' : 'password',
+      verPass: !!this.state.verPass,
+      noVerPass: !this.state.verPass,
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      setPassword: (e) => this.setState({ password: e.target.value }),
+      togglePass: () => this.setState((s) => ({ verPass: !s.verPass })),
+      roles: ['SALA', 'COCINA', 'BARRA', 'ADMIN'].map((nombre) => {
+        const on = (this.state.rol || 'SALA') === nombre;
+        return { nombre, bg: on ? '#E4F0E8' : '#F1F3EE', fg: on ? '#185638' : '#5C6B60', select: () => this.setState({ rol: nombre }) };
+      }),
+      loginError: false,
+      onLogin: () => {},
+      ocupadas: this.mesas.filter((m) => m.estado === 'OCUPADA').map((m) => ({ ...m, listo: m.aviso === 'Listo para servir' })),
+      libres: this.mesas.filter((m) => m.estado === 'LIBRE'),
+      categorias, productos, carrito, pendientes, lineas,
+      carritoVacio: carrito.length === 0,
+      carritoLleno: carrito.length > 0,
+      carritoCount: carrito.reduce((a, i) => a + i.cantidad, 0),
+      total: this.fmt(this.state.lineas.reduce((a, l) => a + l.cantidad * l.precioUnitario, 0))
+    };
+  }
+}
+</script>
+</body>
+</html>
