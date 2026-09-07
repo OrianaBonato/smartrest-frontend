@@ -1,0 +1,6 @@
+// El wrapper ocupa todo el alto para que la cola fije encabezado y pestanas
+// y solo desplace su contenido.
+:host {
+  display: block;
+  height: 100%;
+}

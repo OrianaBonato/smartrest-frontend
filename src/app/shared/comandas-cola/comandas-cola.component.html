@@ -1,178 +1,145 @@
-﻿<section class="cola-panel">
-  <div class="cola-header">
-    <div class="cola-title">{{ titulo }}</div>
-    <button matButton="outlined" (click)="cargarCola()" [disabled]="cargando">
-      Actualizar
+<section class="cola">
+  <div class="cola__encabezado sr-encabezado">
+    <div>
+      <h1 class="sr-encabezado__titulo">{{ titulo }}</h1>
+      <p class="sr-encabezado__resumen">{{ resumen }}</p>
+    </div>
+    <button
+      class="sr-btn sr-btn--secundario cola__actualizar"
+      (click)="cargarCola()"
+      [disabled]="cargando"
+    >
+      {{ cargando ? 'Actualizando…' : 'Actualizar' }}
     </button>
   </div>
 
-  @if (lineas.length === 0) {
-    <div class="cola-empty">Sin comandas en cola</div>
-  } @else {
-    <div class="cola-section">
-      <div class="cola-section-title">Pendientes</div>
+  <nav class="cola__pestanas">
+    <button
+      class="sr-tab"
+      [class.is-activa]="pestana === 'pendientes'"
+      (click)="seleccionar('pendientes')"
+    >
+      <span>Pendientes</span>
+      <span class="sr-tab__count">{{ pendientes.length }}</span>
+    </button>
+    <button class="sr-tab" [class.is-activa]="pestana === 'listas'" (click)="seleccionar('listas')">
+      <span>Listas</span>
+      <span class="sr-tab__count">{{ listas.length }}</span>
+    </button>
+    <button
+      class="sr-tab"
+      [class.is-activa]="pestana === 'canceladas'"
+      (click)="seleccionar('canceladas')"
+    >
+      <span>Canceladas</span>
+      <span class="sr-tab__count">{{ canceladas.length }}</span>
+    </button>
+  </nav>
+
+  <div class="cola__contenido">
+    @if (pestana === 'pendientes') {
       @if (pendientes.length === 0) {
-        <div class="cola-empty">Sin pendientes</div>
+        <div class="sr-empty">Sin comandas en esta cola</div>
       } @else {
-        <div class="cola-grid">
-          @for (linea of pendientes; track linea.idLinea) {
-            <mat-card class="cola-card">
-              <mat-card-header>
-                <mat-card-title>
-                  {{ linea.productoNombre || ('Producto #' + linea.idProducto) }}
-                </mat-card-title>
-                <mat-card-subtitle>
-                  <span class="mesa-label">
-                    Mesa <span class="mesa-num">{{ linea.numeroMesa || linea.idMesa }}</span>
-                  </span>
-                  · {{ linea.cantidad }} uds
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="cola-meta">
-                  <span
-                    class="estado-chip"
-                    [class.is-pendiente]="linea.estado === 'PENDIENTE'"
-                    [class.is-prep]="linea.estado === 'EN_PREPARACION'"
-                  >
-                    {{ linea.estado }}
-                  </span>
-                  <span class="destino-chip">{{ linea.destino }}</span>
-                  <span class="fecha-chip">{{ linea.fechaCreacion | date: 'short' }}</span>
+        <div class="cola__grid">
+          @for (v of pendientes; track v.linea.idLinea) {
+            <article class="sr-card cola-card" [class.is-preparacion]="v.enPreparacion">
+              <div class="cola-card__cabecera">
+                <div class="cola-card__uds" [class.is-preparacion]="v.enPreparacion">
+                  <span class="sr-num cola-card__cantidad">{{ v.cantidad }}</span>
+                  <span class="cola-card__uds-etiqueta">UDS</span>
                 </div>
-                @if (linea.observaciones) {
-                  <div class="cola-obs">
-                    {{ linea.observaciones }}
+                <div class="cola-card__datos">
+                  <h2 class="cola-card__producto">{{ v.producto }}</h2>
+                  <div class="cola-card__meta">
+                    <span class="sr-chip" [class.is-preparacion]="v.enPreparacion">
+                      {{ v.estado }}
+                    </span>
+                    <span class="sr-num cola-card__mesa">Mesa {{ v.mesa }}</span>
+                    <span class="sr-num cola-card__espera">{{ v.espera }}</span>
                   </div>
-                }
-              </mat-card-content>
-              <mat-card-actions class="cola-actions">
-                @if (linea.estado === 'PENDIENTE') {
-                  <button
-                    matButton="filled"
-                    color="primary"
-                    (click)="cambiarEstado(linea, 'EN_PREPARACION')"
-                  >
-                    Preparar
-                  </button>
-                  <button matButton="outlined" (click)="cancelarLinea(linea)">
-                    Cancelar
-                  </button>
-                } @else if (linea.estado === 'EN_PREPARACION') {
-                  <button
-                    matButton="filled"
-                    color="primary"
-                    (click)="cambiarEstado(linea, 'LISTO')"
-                  >
-                    Listo
-                  </button>
-                  <button matButton="outlined" (click)="cancelarLinea(linea)">
-                    Cancelar
-                  </button>
-                }
-              </mat-card-actions>
-            </mat-card>
+                </div>
+              </div>
+
+              <div class="cola-card__obs" [class.is-vacia]="!v.observaciones">
+                <span class="sr-num cola-card__obs-etiqueta">OBS</span>
+                <span class="cola-card__obs-texto">
+                  {{ v.observaciones || 'Sin observaciones' }}
+                </span>
+              </div>
+
+              <div class="cola-card__acciones">
+                <button
+                  class="sr-btn cola-card__avanzar"
+                  [class.sr-btn--principal]="v.enPreparacion"
+                  [class.sr-btn--ambar]="!v.enPreparacion"
+                  (click)="avanzar(v.linea)"
+                >
+                  {{ v.enPreparacion ? 'Listo' : 'Preparar' }}
+                </button>
+                <button
+                  class="sr-btn sr-btn--peligro cola-card__cancelar"
+                  (click)="cancelarLinea(v.linea)"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </article>
           }
         </div>
       }
-    </div>
+    }
 
-    <div class="cola-section">
-      <div class="cola-section-title">Listas</div>
+    @if (pestana === 'listas') {
       @if (listas.length === 0) {
-        <div class="cola-empty">Sin listas</div>
+        <div class="sr-empty">Sin comandas listas</div>
       } @else {
-        <div class="table-wrap">
-          <table mat-table [dataSource]="listasDataSource" class="listas-table">
-            <ng-container matColumnDef="mesa">
-              <th mat-header-cell *matHeaderCellDef>Mesa</th>
-              <td mat-cell *matCellDef="let row"><span class="mesa-num">{{ row.numeroMesa || row.idMesa }}</span></td>
-            </ng-container>
-
-            <ng-container matColumnDef="producto">
-              <th mat-header-cell *matHeaderCellDef>Producto</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.productoNombre || ('Producto #' + row.idProducto) }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="cantidad">
-              <th mat-header-cell *matHeaderCellDef>Cant.</th>
-              <td mat-cell *matCellDef="let row">{{ row.cantidad }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="destino">
-              <th mat-header-cell *matHeaderCellDef>Destino</th>
-              <td mat-cell *matCellDef="let row">{{ row.destino }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>Fecha</th>
-              <td mat-cell *matCellDef="let row">{{ row.fechaCreacion | date: 'short' }}</td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="listasCols"></tr>
-            <tr mat-row *matRowDef="let row; columns: listasCols"></tr>
-          </table>
-          <mat-paginator
-            class="listas-paginator"
-            #listasPaginator
-            [pageSize]="listasPageSize"
-            [pageSizeOptions]="[listasPageSize]"
-            showFirstLastButtons
-          ></mat-paginator>
+        <div class="cola__filas">
+          @for (v of listas; track v.linea.idLinea) {
+            <article class="cola-fila">
+              <span class="sr-halo">
+                <span class="cola-fila__uds is-listo">
+                  <span class="sr-num cola-fila__cantidad">{{ v.cantidad }}</span>
+                  <span class="cola-fila__uds-etiqueta">UDS</span>
+                </span>
+              </span>
+              <div class="cola-fila__datos">
+                <div class="cola-fila__producto">{{ v.producto }}</div>
+                <div class="sr-num cola-fila__detalle">Mesa {{ v.mesa }} · listo {{ v.hora }}</div>
+              </div>
+              <button
+                class="sr-btn sr-btn--secundario cola-fila__accion"
+                (click)="entregar(v.linea)"
+              >
+                Entregado
+              </button>
+            </article>
+          }
         </div>
       }
-    </div>
+    }
 
-    <div class="cola-section">
-      <div class="cola-section-title">Canceladas</div>
+    @if (pestana === 'canceladas') {
       @if (canceladas.length === 0) {
-        <div class="cola-empty">Sin canceladas</div>
+        <div class="sr-empty">Sin comandas canceladas</div>
       } @else {
-        <div class="table-wrap">
-          <table mat-table [dataSource]="canceladasDataSource" class="listas-table">
-            <ng-container matColumnDef="mesa">
-              <th mat-header-cell *matHeaderCellDef>Mesa</th>
-              <td mat-cell *matCellDef="let row"><span class="mesa-num">{{ row.numeroMesa || row.idMesa }}</span></td>
-            </ng-container>
-
-            <ng-container matColumnDef="producto">
-              <th mat-header-cell *matHeaderCellDef>Producto</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.productoNombre || ('Producto #' + row.idProducto) }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="cantidad">
-              <th mat-header-cell *matHeaderCellDef>Cant.</th>
-              <td mat-cell *matCellDef="let row">{{ row.cantidad }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="destino">
-              <th mat-header-cell *matHeaderCellDef>Destino</th>
-              <td mat-cell *matCellDef="let row">{{ row.destino }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="fecha">
-              <th mat-header-cell *matHeaderCellDef>Fecha</th>
-              <td mat-cell *matCellDef="let row">{{ row.fechaCreacion | date: 'short' }}</td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="canceladasCols"></tr>
-            <tr mat-row *matRowDef="let row; columns: canceladasCols"></tr>
-          </table>
-          <mat-paginator
-            #canceladasPaginator
-            [pageSize]="canceladasPageSize"
-            [pageSizeOptions]="[canceladasPageSize]"
-            showFirstLastButtons
-          ></mat-paginator>
+        <div class="cola__filas">
+          @for (v of canceladas; track v.linea.idLinea) {
+            <article class="cola-fila is-cancelada">
+              <span class="cola-fila__uds is-cancelado">
+                <span class="sr-num cola-fila__cantidad">{{ v.cantidad }}</span>
+                <span class="cola-fila__uds-etiqueta">UDS</span>
+              </span>
+              <div class="cola-fila__datos">
+                <div class="cola-fila__producto">{{ v.producto }}</div>
+                <div class="sr-num cola-fila__detalle">
+                  Mesa {{ v.mesa }} · cancelada {{ v.hora }}
+                </div>
+              </div>
+            </article>
+          }
         </div>
       }
-    </div>
-  }
+    }
+  </div>
 </section>
-
-
-
