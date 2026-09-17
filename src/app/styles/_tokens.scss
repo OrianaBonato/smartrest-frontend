@@ -1,0 +1,70 @@
+// Tokens del sistema visual del rediseno v2.0.
+// Se exponen como custom properties en :root: se compilan una sola vez y
+// cualquier componente puede usarlas con var(--sr-*) sin importar nada.
+
+:root {
+  // Marca
+  --sr-verde: #185638;
+  --sr-verde-oscuro: #0e3a24;
+  --sr-header: #10432a;
+  --sr-verde-suave: #e4f0e8;
+
+  // Fondos
+  --sr-fondo: #f7f9f5;
+  --sr-fondo-alt: #edefe9;
+  --sr-blanco: #fff;
+
+  // Texto
+  --sr-texto: #121a15;
+  --sr-texto-suave: #5c6b60;
+  --sr-texto-tenue: #8a9990;
+  --sr-texto-desactivado: #9aa79f;
+  --sr-gris: #a9b4ac;
+
+  // Bordes
+  --sr-borde-suave: rgba(14, 58, 36, 0.08);
+  --sr-borde: rgba(14, 58, 36, 0.12);
+  --sr-borde-medio: rgba(14, 58, 36, 0.16);
+  --sr-borde-fuerte: rgba(14, 58, 36, 0.18);
+
+  // Estado: pendiente
+  --sr-pendiente-bg: #f1f3ee;
+  --sr-pendiente-fg: #5c6b60;
+
+  // Estado: en preparacion
+  --sr-preparacion-bg: #fdf1df;
+  --sr-preparacion-fg: #8a5406;
+  --sr-preparacion-borde: rgba(184, 113, 10, 0.35);
+  --sr-ambar: #b8710a;
+
+  // Estado: listo
+  --sr-listo-bg: #e2f7ea;
+  --sr-listo-fg: #14743f;
+  --sr-listo-halo: #12c065;
+
+  // Estado: cancelado
+  --sr-cancelado-bg: #fde7e6;
+  --sr-cancelado-fg: #8a1214;
+  --sr-rojo: #ba1a1a;
+  --sr-rojo-borde: rgba(186, 26, 26, 0.22);
+
+  // Radios
+  --sr-r-xs: 10px;
+  --sr-r-s: 14px;
+  --sr-r-m: 18px;
+  --sr-r-l: 22px;
+  --sr-r-xl: 24px;
+  --sr-r-xxl: 34px;
+  --sr-r-pill: 999px;
+
+  // Sombras
+  --sr-sombra-card: 0 6px 18px rgba(14, 58, 36, 0.08);
+  --sr-sombra-card-alta: 0 8px 24px rgba(14, 58, 36, 0.14);
+  --sr-sombra-accion: 0 10px 26px rgba(24, 86, 56, 0.3);
+  --sr-sombra-ambar: 0 8px 20px rgba(184, 113, 10, 0.28);
+  --sr-sombra-barra: 0 -14px 34px rgba(14, 58, 36, 0.1);
+
+  // Tipografias
+  --sr-fuente: 'Figtree', system-ui, sans-serif;
+  --sr-fuente-num: 'Space Grotesk', 'Figtree', sans-serif;
+}

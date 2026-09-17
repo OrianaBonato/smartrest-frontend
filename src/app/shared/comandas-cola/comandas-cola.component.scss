@@ -1,144 +1,293 @@
-.cola-panel {
-  display: grid;
-  gap: 12px;
-  padding: 12px;
+:host {
+  display: block;
+  height: 100%;
 }
 
-.cola-header {
+.cola {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  height: 100%;
+  background: var(--sr-fondo);
+  box-sizing: border-box;
 }
 
-.cola-section {
+.cola__encabezado {
+  flex: none;
+  padding: 26px 24px 0;
+}
+
+.cola__actualizar {
+  height: 56px;
+  padding: 0 24px;
+}
+
+.cola__pestanas {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  padding: 20px 24px 0;
+}
+
+.cola__contenido {
+  flex: 1;
+  overflow: auto;
+  padding: 22px 24px 26px;
+}
+
+.cola__grid {
   display: grid;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: start;
 }
 
-.cola-section-title {
-  font-size: 1.2rem;
-  color: #333;
-}
-
-.cola-title {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.cola-empty {
-  color: #666;
-  padding: 8px 0;
-}
-
-.cola-grid {
+.cola__filas {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
-  justify-content: start;
-  justify-items: start;
 }
 
+// Tarjeta de comanda pendiente o en preparacion.
 .cola-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 200px;
-  width: 100%;
-  max-width: 320px;
+  border-width: 2px;
 }
 
-.cola-meta {
+.cola-card.is-preparacion {
+  border-color: var(--sr-preparacion-borde);
+}
+
+.cola-card__cabecera {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.cola-card__uds {
+  flex: none;
+  width: 78px;
+  height: 78px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-top: 6px;
+  justify-content: center;
+  border-radius: var(--sr-r-m);
+  background: var(--sr-pendiente-bg);
+  color: var(--sr-verde-oscuro);
 }
 
-.mesa-label {
-  font-size: 0.95rem;
+.cola-card__uds.is-preparacion {
+  background: var(--sr-preparacion-bg);
+  color: var(--sr-preparacion-fg);
 }
 
-.mesa-num {
+.cola-card__cantidad {
+  font-size: 36px;
+}
+
+.cola-card__uds-etiqueta {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
 }
 
-.estado-chip,
-.destino-chip {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #eee;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-.fecha-chip {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #f2f2f2;
-  color: #555;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-.estado-chip.is-pendiente {
-  background: #fff4cc;
-  color: #7a5d00;
-}
-
-.estado-chip.is-prep {
-  background: #e8f0fe;
-  color: #1a4e8a;
-}
-
-.estado-chip.is-listo {
-  background: #e5f4ea;
-  color: #1f6f43;
-}
-
-.destino-chip {
-  background: #f2f2f2;
-  color: #555;
-}
-
-.cola-obs {
-  margin-top: 8px;
-  color: #444;
-  font-size: 0.9rem;
-}
-
-.cola-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.cola-actions button {
-  flex: 1 1 calc(50% - 4px);
+.cola-card__datos {
+  flex: 1;
   min-width: 0;
 }
 
-.cola-actions button:only-child {
-  flex: 1 1 100%;
+.cola-card__producto {
+  margin: 0;
+  font: 800 21px/1.25 var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+  text-wrap: pretty;
 }
 
-.table-wrap {
-  width: 100%;
-  overflow: auto;
+.cola-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 9px;
 }
 
-.listas-table {
-  width: 100%;
-  min-width: 520px;
+.cola-card__mesa {
+  font-size: 15px;
+  color: var(--sr-texto-suave);
 }
 
-.listas-table th,
-.listas-table td {
-  padding: 8px 12px;
+.cola-card__espera {
+  font-size: 15px;
+  color: var(--sr-texto-tenue);
+}
+
+.cola-card__obs {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 1px solid var(--sr-preparacion-borde);
+  border-radius: var(--sr-r-s);
+  background: var(--sr-preparacion-bg);
+}
+
+.cola-card__obs.is-vacia {
+  border-color: var(--sr-borde-suave);
+  background: var(--sr-fondo);
+}
+
+.cola-card__obs-etiqueta {
+  flex: none;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--sr-ambar);
+}
+
+.cola-card__obs.is-vacia .cola-card__obs-etiqueta {
+  color: var(--sr-gris);
+}
+
+.cola-card__obs-texto {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font: 600 15px/1.3 var(--sr-fuente);
+  color: #7a4b06;
+}
+
+.cola-card__obs.is-vacia .cola-card__obs-texto {
+  color: var(--sr-texto-desactivado);
+}
+
+.cola-card__acciones {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.cola-card__avanzar {
+  flex: 1;
+  min-width: 0;
+  height: 72px;
+  font-size: 19px;
+  border-radius: var(--sr-r-l);
+}
+
+.cola-card__cancelar {
+  flex: none;
+  width: 118px;
+  height: 72px;
+  border-radius: var(--sr-r-l);
+}
+
+// Fila de comanda lista o cancelada.
+.cola-fila {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--sr-borde);
+  border-radius: var(--sr-r-m);
+  background: var(--sr-blanco);
+}
+
+.cola-fila.is-cancelada {
+  opacity: 0.75;
+}
+
+.cola-fila__uds {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--sr-r-s);
+}
+
+.cola-fila__uds.is-listo {
+  background: var(--sr-listo-bg);
+  color: var(--sr-listo-fg);
+}
+
+.cola-fila__uds.is-cancelado {
+  background: var(--sr-cancelado-bg);
+  color: var(--sr-cancelado-fg);
+}
+
+.cola-fila__cantidad {
+  font-size: 28px;
+}
+
+.cola-fila__uds-etiqueta {
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.cola-fila__datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.cola-fila__producto {
+  font: 700 19px var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+}
+
+.cola-fila.is-cancelada .cola-fila__producto {
+  color: var(--sr-texto-suave);
+  text-decoration: line-through;
+}
+
+.cola-fila__detalle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--sr-texto-tenue);
+}
+
+.cola-fila__accion {
+  flex: none;
+  height: 64px;
+  padding: 0 24px;
+}
+
+@media (max-width: 600px) {
+  .cola__encabezado,
+  .cola__pestanas {
+    padding-inline: 16px;
+  }
+
+  .cola__contenido {
+    padding: 18px 16px 22px;
+  }
+
+  .cola__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cola-card__avanzar,
+  .cola-card__cancelar {
+    height: 62px;
+  }
+
+  .cola-card__cancelar {
+    width: 96px;
+  }
+
+  .cola-fila {
+    flex-wrap: wrap;
+  }
+
+  .cola-fila__accion {
+    width: 100%;
+  }
 }

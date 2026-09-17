@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDEFE9;font-family:Figtree,system-ui,sans-serif}
+a{color:#185638}a:hover{color:#0E3A24}
+@keyframes srHalo{0%{transform:scale(.86);opacity:.95}55%{transform:scale(1.24);opacity:.38}100%{transform:scale(1.06);opacity:.8}}
+</style></helmet>
+
+<div style="width:820px;height:1180px;background:#F7F9F5;display:flex;flex-direction:column;overflow:hidden">
+<div style="height:88px;background:#10432A;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex:none">
+<div style="display:flex;align-items:center;gap:16px">
+<img src="assets/marca-blanca.png" alt="SmartRest" style="height:44px;object-fit:contain">
+<span style="padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.14);font:300 13px 'Space Grotesk',sans-serif;color:#fff;letter-spacing:.06em">COCINA</span>
+</div>
+<button onClick="{{ recargar }}" style="height:56px;padding:0 24px;border:0;border-radius:16px;background:rgba(255,255,255,.16);color:#fff;font:700 16px Figtree,sans-serif;cursor:pointer" style-hover="background:rgba(255,255,255,.28)">Actualizar</button>
+</div>
+
+<div style="padding:26px 24px 0;flex:none">
+<div style="font:800 34px/1.05 Figtree,sans-serif;color:#0E3A24;letter-spacing:-.02em">Cola de cocina</div>
+<div style="font:500 16px Figtree,sans-serif;color:#5C6B60;margin-top:7px">{{ resumen }}</div>
+</div>
+
+<div style="display:flex;gap:10px;padding:20px 24px 0;flex:none">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.select }}" style="flex:1;height:76px;border:2px solid {{ t.border }};border-radius:20px;background:{{ t.bg }};color:{{ t.fg }};font:700 17px Figtree,sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+<span>{{ t.nombre }}</span>
+<span style="font:300 15px 'Space Grotesk',sans-serif;opacity:.8">{{ t.count }}</span>
+</button>
+</sc-for>
+</div>
+
+<div style="flex:1;overflow:auto;padding:22px 24px 26px">
+<sc-if value="{{ vacio }}" hint-placeholder-val="{{ false }}">
+<div style="border:2px dashed rgba(14,58,36,.16);border-radius:24px;padding:60px 24px;text-align:center;font:600 18px Figtree,sans-serif;color:#8A9990">Sin comandas en esta cola</div>
+</sc-if>
+
+<sc-if value="{{ enPendientes }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+<sc-for list="{{ pendientes }}" as="l" hint-placeholder-count="4">
+<div style="background:#fff;border:2px solid {{ l.borde }};border-radius:24px;padding:20px;box-shadow:0 6px 18px rgba(14,58,36,.08);display:flex;flex-direction:column">
+<div style="display:flex;align-items:flex-start;gap:18px">
+<div style="width:78px;display:flex;flex-direction:column;align-items:center;gap:6px;flex:none">
+<div style="width:78px;height:78px;border-radius:20px;background:{{ l.mesaBg }};display:flex;flex-direction:column;align-items:center;justify-content:center">
+<span style="font:300 36px/1 'Space Grotesk',sans-serif;color:{{ l.mesaFg }}">{{ l.restantes }}</span>
+<span style="font:700 11px Figtree,sans-serif;color:{{ l.mesaFg }};opacity:.7;letter-spacing:.08em">UDS</span>
+</div>
+</div>
+<div style="flex:1;min-width:0">
+<div style="font:800 21px/1.25 Figtree,sans-serif;color:#0E3A24;text-wrap:pretty">{{ l.productoNombre }}</div>
+<div style="display:flex;align-items:center;gap:12px;margin-top:9px;flex-wrap:wrap">
+<span style="padding:7px 13px;border-radius:999px;background:{{ l.estadoBg }};font:300 13px 'Space Grotesk',sans-serif;color:{{ l.estadoFg }};letter-spacing:.04em">{{ l.estado }}</span>
+<span style="font:300 15px 'Space Grotesk',sans-serif;color:#5C6B60">Mesa {{ l.numeroMesa }}</span>
+<span style="font:300 15px 'Space Grotesk',sans-serif;color:#8A9990">{{ l.espera }}</span>
+</div>
+</div>
+</div>
+<div style="margin-top:16px;height:62px;display:flex;align-items:center;gap:12px;background:{{ l.obsBg }};border:1px solid {{ l.obsBorde }};border-radius:14px;padding:0 16px;box-sizing:border-box">
+<span style="font:300 12px 'Space Grotesk',sans-serif;color:{{ l.obsLabelFg }};letter-spacing:.06em;flex:none">OBS</span>
+<span style="font:600 15px/1.3 Figtree,sans-serif;color:{{ l.obsFg }};overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">{{ l.obsTexto }}</span>
+</div>
+<div style="display:flex;gap:12px;margin-top:18px">
+<button onClick="{{ l.avanzar }}" style="flex:1;height:72px;border:0;border-radius:20px;background:{{ l.accionBg }};color:#fff;font:800 19px Figtree,sans-serif;cursor:pointer;box-shadow:{{ l.accionSombra }};display:flex;align-items:center;justify-content:center;gap:12px" style-hover="filter:brightness(.92)" style-active="transform:translateY(2px)">
+<span>{{ l.accion }}</span>
+<sc-if value="{{ l.mostrarProgreso }}" hint-placeholder-val="{{ false }}">
+<span style="padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.22);font:300 16px 'Space Grotesk',sans-serif">{{ l.progreso }}</span>
+</sc-if>
+
+</button>
+<button onClick="{{ l.cancelar }}" style="width:118px;height:72px;border:2px solid rgba(186,26,26,.22);border-radius:20px;background:#fff;color:#BA1A1A;font:700 17px Figtree,sans-serif;cursor:pointer" style-hover="background:#BA1A1A;color:#fff;border-color:#BA1A1A">Cancelar</button>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ enListas }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;gap:12px">
+<sc-for list="{{ listas }}" as="l" hint-placeholder-count="3">
+<div style="background:#fff;border:1px solid rgba(14,58,36,.12);border-radius:20px;padding:18px 20px;display:flex;align-items:center;gap:16px">
+<span style="position:relative;display:inline-flex;flex:none">
+<span style="position:absolute;inset:-5px;border-radius:18px;background:#12C065;filter:blur(8px);animation:srHalo 1.5s ease-in-out infinite"></span>
+<span style="position:relative;width:64px;height:64px;border-radius:16px;background:#E2F7EA;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#14743F"><span style="font:300 28px/1 'Space Grotesk',sans-serif">{{ l.cantidad }}</span><span style="font:700 10px Figtree,sans-serif;opacity:.7;letter-spacing:.08em">UDS</span></span>
+</span>
+<div style="flex:1;min-width:0">
+<div style="font:700 19px Figtree,sans-serif;color:#0E3A24">{{ l.productoNombre }}</div>
+<div style="font:300 14px 'Space Grotesk',sans-serif;color:#8A9990;margin-top:4px">Mesa {{ l.numeroMesa }} · listo {{ l.hora }}</div>
+</div>
+<button onClick="{{ l.entregar }}" style="height:64px;padding:0 24px;border:2px solid rgba(14,58,36,.18);border-radius:18px;background:#fff;font:700 16px Figtree,sans-serif;color:#185638;cursor:pointer;flex:none" style-hover="background:#185638;color:#fff;border-color:#185638">Entregado</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ enCanceladas }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;gap:12px">
+<sc-for list="{{ canceladas }}" as="l" hint-placeholder-count="2">
+<div style="background:#fff;border:1px solid rgba(14,58,36,.10);border-radius:20px;padding:18px 20px;display:flex;align-items:center;gap:16px;opacity:.75">
+<span style="width:64px;height:64px;border-radius:16px;background:#FDE7E6;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8A1214;flex:none"><span style="font:300 28px/1 'Space Grotesk',sans-serif">{{ l.cantidad }}</span><span style="font:700 10px Figtree,sans-serif;opacity:.7;letter-spacing:.08em">UDS</span></span>
+<div style="flex:1;min-width:0">
+<div style="font:700 19px Figtree,sans-serif;color:#5C6B60;text-decoration:line-through">{{ l.productoNombre }}</div>
+<div style="font:300 14px 'Space Grotesk',sans-serif;color:#8A9990;margin-top:4px">Mesa {{ l.numeroMesa }} · cancelada {{ l.hora }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:820,&quot;height&quot;:1180}}">
+class Component extends DCLogic {
+  state = {
+    tab: 'Pendientes',
+    lineas: [
+      { idLinea: 501, numeroMesa: '07', productoNombre: 'Solomillo a la pimienta', cantidad: 2, estado: 'EN_PREPARACION', observaciones: 'Uno al punto, otro poco hecho', hora: '21:38', espera: '12 min en cola' },
+      { idLinea: 502, numeroMesa: '03', productoNombre: 'Croquetas de jamón', cantidad: 2, estado: 'PENDIENTE', observaciones: '', hora: '21:44', espera: '6 min en cola' },
+      { idLinea: 503, numeroMesa: '07', productoNombre: 'Risotto de setas', cantidad: 3, estado: 'PENDIENTE', observaciones: 'Sin gluten', hora: '21:46', espera: '4 min en cola' },
+      { idLinea: 504, numeroMesa: '02', productoNombre: 'Lubina a la sal', cantidad: 1, estado: 'PENDIENTE', observaciones: '', hora: '21:48', espera: '2 min en cola' },
+      { idLinea: 505, numeroMesa: '03', productoNombre: 'Tabla de quesos', cantidad: 1, estado: 'LISTO', observaciones: '', hora: '21:35', espera: '' },
+      { idLinea: 506, numeroMesa: '05', productoNombre: 'Hamburguesa Smart', cantidad: 2, estado: 'LISTO', observaciones: '', hora: '21:31', espera: '' },
+      { idLinea: 507, numeroMesa: '02', productoNombre: 'Coulant de chocolate', cantidad: 1, estado: 'CANCELADO', observaciones: '', hora: '21:22', espera: '' }
+    ]
+  };
+
+  estadoColor = {
+    PENDIENTE: { bg: '#F1F3EE', fg: '#5C6B60', borde: 'rgba(14,58,36,.12)' },
+    EN_PREPARACION: { bg: '#FDF1DF', fg: '#8A5406', borde: 'rgba(184,113,10,.35)' }
+  };
+
+  marcarUnidad = (idLinea) => this.setState((s) => ({
+    lineas: s.lineas.map((l) => {
+      if (l.idLinea !== idLinea) return l;
+      const hechos = (l.hechos || 0) + 1;
+      return hechos >= l.cantidad ? { ...l, hechos, estado: 'LISTO' } : { ...l, hechos };
+    })
+  }));
+
+  cambiar = (idLinea, estado) => this.setState((s) => ({
+    lineas: s.lineas.map((l) => (l.idLinea === idLinea ? { ...l, estado } : l))
+  }));
+
+  quitar = (idLinea) => this.setState((s) => ({ lineas: s.lineas.filter((l) => l.idLinea !== idLinea) }));
+
+  renderVals() {
+    const L = this.state.lineas;
+    const pend = L.filter((l) => l.estado === 'PENDIENTE' || l.estado === 'EN_PREPARACION');
+    const listas = L.filter((l) => l.estado === 'LISTO');
+    const canc = L.filter((l) => l.estado === 'CANCELADO');
+    const tab = this.state.tab;
+
+    const pendientes = pend.map((l) => {
+      const c = this.estadoColor[l.estado];
+      const prep = l.estado === 'EN_PREPARACION';
+      return {
+        ...l,
+        borde: c.borde,
+        estadoBg: c.bg,
+        estadoFg: c.fg,
+        mesaBg: prep ? '#FDF1DF' : '#F1F3EE',
+        mesaFg: prep ? '#8A5406' : '#0E3A24',
+        obsTexto: l.observaciones || 'Sin observaciones',
+        obsBg: l.observaciones ? '#FDF1DF' : '#F7F9F5',
+        obsBorde: l.observaciones ? 'rgba(184,113,10,.20)' : 'rgba(14,58,36,.08)',
+        obsFg: l.observaciones ? '#7A4B06' : '#9AA79F',
+        obsLabelFg: l.observaciones ? '#B8710A' : '#B4BEB7',
+        accion: prep ? 'Listo' : 'Preparar',
+        accionBg: prep ? '#185638' : '#B8710A',
+        accionSombra: prep ? '0 8px 20px rgba(24,86,56,.26)' : '0 8px 20px rgba(184,113,10,.28)',
+        restantes: l.cantidad - (l.hechos || 0),
+        mostrarProgreso: prep && l.cantidad > 1,
+        progreso: (l.hechos || 0) + '/' + l.cantidad,
+        progresoFg: (l.hechos || 0) > 0 ? '#B8710A' : '#A9B4AC',
+        avanzar: () => (prep ? this.marcarUnidad(l.idLinea) : this.cambiar(l.idLinea, 'EN_PREPARACION')),
+        cancelar: () => this.cambiar(l.idLinea, 'CANCELADO')
+      };
+    });
+
+    return {
+      tabs: [['Pendientes', pend.length], ['Listas', listas.length], ['Canceladas', canc.length]].map(([nombre, count]) => ({
+        nombre,
+        count,
+        bg: tab === nombre ? '#185638' : '#fff',
+        fg: tab === nombre ? '#fff' : '#185638',
+        border: tab === nombre ? '#185638' : 'rgba(14,58,36,.16)',
+        select: () => this.setState({ tab: nombre })
+      })),
+      resumen: pend.length + ' en cola · ' + listas.length + ' listas para servir',
+      pendientes,
+      listas: listas.map((l) => ({ ...l, entregar: () => this.quitar(l.idLinea) })),
+      canceladas: canc,
+      enPendientes: tab === 'Pendientes' && pend.length > 0,
+      enListas: tab === 'Listas' && listas.length > 0,
+      enCanceladas: tab === 'Canceladas' && canc.length > 0,
+      vacio: (tab === 'Pendientes' && !pend.length) || (tab === 'Listas' && !listas.length) || (tab === 'Canceladas' && !canc.length),
+      recargar: () => this.forceUpdate()
+    };
+  }
+}
+</script>
+</body>
+</html>

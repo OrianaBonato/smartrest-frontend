@@ -1,0 +1,6 @@
+// El wrapper ocupa todo el alto para que el listado fije el encabezado
+// y solo desplace su contenido.
+:host {
+  display: block;
+  height: 100%;
+}

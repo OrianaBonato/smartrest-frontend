@@ -1,60 +1,76 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ComandaService, EstadoLinea, LineaComandaResponse } from '../../services/comanda.service';
+
+// Pestanas de la cola.
+export type PestanaCola = 'pendientes' | 'listas' | 'canceladas';
+
+// Linea preparada para pintar: evita calcular fechas y textos en la plantilla.
+export interface LineaVista {
+  linea: LineaComandaResponse;
+  mesa: string;
+  producto: string;
+  cantidad: number;
+  estado: EstadoLinea;
+  enPreparacion: boolean;
+  observaciones: string | null;
+  hora: string;
+  espera: string;
+}
 
 @Component({
   selector: 'smartrest-comandas-cola',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatTableModule, MatPaginatorModule],
+  imports: [CommonModule],
   templateUrl: './comandas-cola.component.html',
   styleUrl: './comandas-cola.component.scss',
 })
 // Cola de comandas para cocina o barra.
-export class ComandasColaComponent implements OnInit {
+export class ComandasColaComponent implements OnInit, OnDestroy {
   // Destino de la cola: cocina o barra
   @Input({ required: true }) destino!: 'COCINA' | 'BARRA';
 
-  // Titulo mostrado en el encabezado del panel
+  // Titulo mostrado en el encabezado de la pantalla
   @Input() titulo = 'Cola';
 
-  // Lineas visibles en la cola y estado de carga
-  lineas: LineaComandaResponse[] = [];
-  pendientes: LineaComandaResponse[] = [];
-  listas: LineaComandaResponse[] = [];
-  canceladas: LineaComandaResponse[] = [];
-  listasCols: string[] = ['mesa', 'producto', 'cantidad', 'destino', 'fecha'];
-  canceladasCols: string[] = ['mesa', 'producto', 'cantidad', 'destino', 'fecha'];
-  listasDataSource = new MatTableDataSource<LineaComandaResponse>([]);
-  canceladasDataSource = new MatTableDataSource<LineaComandaResponse>([]);
-  readonly listasPageSize = 10;
-  readonly canceladasPageSize = 10;
+  // Pestana visible y lineas ya preparadas para pintar
+  pestana: PestanaCola = 'pendientes';
+  pendientes: LineaVista[] = [];
+  listas: LineaVista[] = [];
+  canceladas: LineaVista[] = [];
   cargando = false;
+
+  // Refresco automatico: cocina no puede depender de pulsar un boton
+  private readonly intervaloRefresco = 12000;
+  private temporizador?: ReturnType<typeof setInterval>;
   private colaRequestId = 0;
-  @ViewChild('listasPaginator')
-  set listasPaginator(paginator: MatPaginator | undefined) {
-    if (!paginator) return;
-    this.listasDataSource.paginator = paginator;
-    this.cdr.markForCheck();
-  }
-  @ViewChild('canceladasPaginator')
-  set canceladasPaginator(paginator: MatPaginator | undefined) {
-    if (!paginator) return;
-    this.canceladasDataSource.paginator = paginator;
-    this.cdr.markForCheck();
-  }
 
   constructor(
     private comandaService: ComandaService,
     private cdr: ChangeDetectorRef,
   ) {}
 
-  // Carga inicial de la cola
+  // Carga inicial y arranque del refresco automatico
   ngOnInit(): void {
     this.cargarCola();
+    this.temporizador = setInterval(() => this.cargarCola(), this.intervaloRefresco);
+  }
+
+  // Para el refresco al salir de la pantalla
+  ngOnDestroy(): void {
+    if (this.temporizador) {
+      clearInterval(this.temporizador);
+    }
+  }
+
+  // Resumen bajo el titulo
+  get resumen(): string {
+    return `${this.pendientes.length} en cola · ${this.listas.length} listas para servir`;
+  }
+
+  // Cambia de pestana
+  seleccionar(pestana: PestanaCola) {
+    this.pestana = pestana;
   }
 
   // Refresca la cola desde el backend
@@ -66,26 +82,18 @@ export class ComandasColaComponent implements OnInit {
     this.comandaService.colaByDestino(this.destino).subscribe({
       next: (res) => {
         if (requestId !== this.colaRequestId) return;
-        this.lineas = res;
-        this.pendientes = this.lineas.filter(
-          (l) => l.estado === 'PENDIENTE' || l.estado === 'EN_PREPARACION',
-        ).slice().sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? -1 : 1));
-        this.listas = this.lineas
+        this.pendientes = res
+          .filter((l) => l.estado === 'PENDIENTE' || l.estado === 'EN_PREPARACION')
+          .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? -1 : 1))
+          .map((l) => this.aVista(l));
+        this.listas = res
           .filter((l) => l.estado === 'LISTO')
-          .slice()
-          .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1));
-        this.canceladas = this.lineas
+          .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1))
+          .map((l) => this.aVista(l));
+        this.canceladas = res
           .filter((l) => l.estado === 'CANCELADO')
-          .slice()
-          .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1));
-        this.listasDataSource.data = this.listas;
-        this.canceladasDataSource.data = this.canceladas;
-        if (this.listasDataSource.paginator) {
-          this.listasDataSource.paginator.firstPage();
-        }
-        if (this.canceladasDataSource.paginator) {
-          this.canceladasDataSource.paginator.firstPage();
-        }
+          .sort((a, b) => (a.fechaCreacion < b.fechaCreacion ? 1 : -1))
+          .map((l) => this.aVista(l));
         this.cargando = false;
         this.cdr.markForCheck();
       },
@@ -98,12 +106,22 @@ export class ComandasColaComponent implements OnInit {
     });
   }
 
+  // Avanza la linea al siguiente estado del flujo
+  avanzar(linea: LineaComandaResponse) {
+    const siguiente = this.siguienteEstado(linea.estado);
+    if (!siguiente) return;
+    this.cambiarEstado(linea, siguiente);
+  }
+
+  // Marca como entregada una linea lista, que sale de la cola
+  entregar(linea: LineaComandaResponse) {
+    this.cambiarEstado(linea, 'ENTREGADO');
+  }
+
   // Cambia el estado de una linea segun accion del operador
   cambiarEstado(linea: LineaComandaResponse, nuevoEstado: EstadoLinea) {
     this.comandaService.cambiarEstadoLinea(linea.idLinea, nuevoEstado).subscribe({
-      next: (actualizada) => {
-        this.cargarCola();
-      },
+      next: () => this.cargarCola(),
       error: (e) => console.error('Error cambiando estado', e),
     });
   }
@@ -120,5 +138,43 @@ export class ComandasColaComponent implements OnInit {
     if (estado === 'PENDIENTE') return 'EN_PREPARACION';
     if (estado === 'EN_PREPARACION') return 'LISTO';
     return null;
+  }
+
+  // Prepara una linea del backend para pintarla
+  private aVista(l: LineaComandaResponse): LineaVista {
+    return {
+      linea: l,
+      mesa: this.numeroMesa(l),
+      producto: l.productoNombre || `Producto #${l.idProducto}`,
+      cantidad: l.cantidad,
+      estado: l.estado,
+      enPreparacion: l.estado === 'EN_PREPARACION',
+      observaciones: l.observaciones?.trim() || null,
+      hora: this.formatearHora(l.fechaActualizacion || l.fechaCreacion),
+      espera: this.calcularEspera(l.fechaCreacion),
+    };
+  }
+
+  // Numero de mesa a dos digitos, como en el diseno
+  private numeroMesa(l: LineaComandaResponse): string {
+    const numero = l.numeroMesa ?? l.idMesa;
+    return numero == null ? '--' : String(numero).padStart(2, '0');
+  }
+
+  // Hora corta de la linea
+  private formatearHora(fecha: string): string {
+    const momento = new Date(fecha);
+    if (Number.isNaN(momento.getTime())) return '';
+    return momento.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Tiempo que lleva la linea esperando en la cola
+  private calcularEspera(fecha: string): string {
+    const creada = new Date(fecha).getTime();
+    if (Number.isNaN(creada)) return '';
+    const minutos = Math.max(0, Math.floor((Date.now() - creada) / 60000));
+    if (minutos < 60) return `${minutos} min en cola`;
+    const horas = Math.floor(minutos / 60);
+    return `${horas} h en cola`;
   }
 }

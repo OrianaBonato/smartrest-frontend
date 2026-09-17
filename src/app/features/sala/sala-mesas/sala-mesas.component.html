@@ -1,27 +1,89 @@
-<div class="smartrest-fondo-gris"></div>
-<section class="mesas-panel">
-  <div class="mesas-grid">
-    @for (mesa of mesas; track mesa.idMesa) {
-      <mat-card class="mesa-card" [class.is-ocupada]="mesa.estado === 'OCUPADA'">
-        <mat-card-header>
-          <mat-card-title>Mesa {{ mesa.numero }}</mat-card-title>
-          <mat-card-subtitle>Capacidad {{ mesa.capacidad }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="mesa-estado">
-            <span class="estado-dot" [class.is-ocupada]="mesa.estado === 'OCUPADA'"></span>
-            <mat-icon class="estado-icon mat-symbol" fontSet="material-symbols-outlined">
-              {{ mesa.estado === 'OCUPADA' ? 'dine_in' : 'table_restaurant' }}
-            </mat-icon>
-            <span>{{ mesa.estado }}</span>
-          </div>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" class="mesa-action" (click)="mesaOnClick(mesa)">
-            Entrar
-          </button>
-        </mat-card-actions>
-      </mat-card>
+<section class="mesas">
+  <div class="mesas__encabezado sr-encabezado">
+    <div>
+      <h1 class="sr-encabezado__titulo">Mesas</h1>
+      <p class="sr-encabezado__resumen">{{ resumen }}</p>
+    </div>
+    <button
+      class="sr-btn sr-btn--secundario mesas__actualizar"
+      (click)="cargarMesas()"
+      [disabled]="cargando"
+    >
+      {{ cargando ? 'Actualizando…' : 'Actualizar' }}
+    </button>
+  </div>
+
+  <div class="mesas__contenido">
+    @if (ocupadas.length === 0 && libres.length === 0) {
+      <div class="sr-empty">No hay mesas configuradas</div>
+    }
+
+    @if (ocupadas.length > 0) {
+      <div class="sr-seccion">
+        <span class="sr-seccion__punto"></span>
+        <span class="sr-seccion__texto">EN SERVICIO · {{ ocupadas.length }}</span>
+        <span class="sr-seccion__linea"></span>
+      </div>
+      <div class="mesas__grid">
+        @for (m of ocupadas; track m.mesa.idMesa) {
+          <article class="sr-card mesa-ocupada">
+            <div class="mesa-ocupada__cabecera">
+              <div>
+                <div class="sr-num mesa-ocupada__numero">{{ m.numero }}</div>
+                <div class="mesa-ocupada__pax">
+                  @if (m.comensales !== null) {
+                    {{ m.comensales }} de {{ m.capacidad }} pax
+                  } @else {
+                    Capacidad {{ m.capacidad }}
+                  }
+                </div>
+              </div>
+              @if (m.tiempo) {
+                <span class="sr-num mesa-ocupada__tiempo">{{ m.tiempo }}</span>
+              }
+            </div>
+
+            <div class="mesa-ocupada__estado">
+              @if (m.listo) {
+                <span class="sr-halo">
+                  <span class="mesa-ocupada__aviso is-listo">{{ m.aviso }}</span>
+                </span>
+              } @else {
+                <span class="mesa-ocupada__aviso" [class.is-preparacion]="m.tipoAviso === 'preparacion'">
+                  {{ m.aviso }}
+                </span>
+              }
+              <span class="sr-num mesa-ocupada__total">{{ m.total }}</span>
+            </div>
+
+            <button class="sr-btn sr-btn--principal mesa-ocupada__entrar" (click)="mesaOnClick(m.mesa)">
+              Entrar
+            </button>
+          </article>
+        }
+      </div>
+    }
+
+    @if (libres.length > 0) {
+      <div class="sr-seccion is-tenue mesas__seccion-libres">
+        <span class="sr-seccion__punto"></span>
+        <span class="sr-seccion__texto">LIBRES · {{ libres.length }}</span>
+        <span class="sr-seccion__linea"></span>
+      </div>
+      <div class="mesas__grid">
+        @for (m of libres; track m.mesa.idMesa) {
+          <article class="mesa-libre">
+            <div class="sr-num mesa-libre__numero">{{ m.numero }}</div>
+            <div class="mesa-libre__datos">
+              <div class="mesa-libre__titulo">Libre</div>
+              <div class="mesa-libre__capacidad">Capacidad {{ m.capacidad }}</div>
+            </div>
+            <button class="sr-btn sr-btn--secundario mesa-libre__abrir" (click)="mesaOnClick(m.mesa)">
+              Abrir
+            </button>
+          </article>
+        }
+      </div>
     }
   </div>
 </section>

@@ -1,10 +1,11 @@
-@if (authService.loggedIn$ | async) {
-  <mat-toolbar class="smartrest-toolbar">
-    <div class="smartrest-logo-blanco"></div>
-    <button mat-raised-button color="primary" (click)="logout()">Salir</button>
-  </mat-toolbar>
-}
-<div style="height:calc(100vh - 8vh);">
-<router-outlet />
+<div class="app">
+  @if (authService.loggedIn$ | async) {
+    <mat-toolbar class="smartrest-toolbar">
+      <div class="smartrest-logo-blanco"></div>
+      <button mat-raised-button color="primary" (click)="logout()">Salir</button>
+    </mat-toolbar>
+  }
+  <div class="app__contenido">
+    <router-outlet />
+  </div>
 </div>
-

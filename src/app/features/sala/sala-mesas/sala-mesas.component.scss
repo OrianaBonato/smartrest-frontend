@@ -1,63 +1,182 @@
-.mesas-panel {
-  padding: 16px;
+:host {
+  display: block;
+  height: 100%;
 }
 
-.mesas-grid {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.mesa-card {
+.mesas {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--sr-fondo);
+}
+
+.mesas__encabezado {
+  flex: none;
+  padding: 26px 24px 0;
+}
+
+.mesas__actualizar {
+  height: 56px;
+  padding: 0 24px;
+}
+
+.mesas__contenido {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+}
+
+.mesas__seccion-libres {
+  margin-top: 30px;
+}
+
+.mesas__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+// Mesa en servicio.
+.mesa-ocupada {
+  border-width: 2px;
+  border-color: rgba(24, 86, 56, 0.22);
+  cursor: default;
+}
+
+.mesa-ocupada__cabecera {
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  min-height: 180px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  padding: 0.4rem  ;
+  gap: 12px;
 }
 
-.mesa-card.is-ocupada {
-  border: 2px solid rgba(46, 125, 50, 0.6);
-  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.35);
+.mesa-ocupada__numero {
+  font-size: 40px;
+  color: var(--sr-verde-oscuro);
 }
 
-.mesa-estado {
+.mesa-ocupada__pax {
+  margin-top: 6px;
+  font: 600 14px var(--sr-fuente);
+  color: var(--sr-texto-suave);
+}
+
+.mesa-ocupada__tiempo {
+  flex: none;
+  padding: 8px 14px;
+  border-radius: var(--sr-r-pill);
+  background: var(--sr-verde-suave);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--sr-verde);
+}
+
+.mesa-ocupada__estado {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
+  flex-wrap: wrap;
+  margin: 16px 0 14px;
 }
 
-.estado-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
+.mesa-ocupada__aviso {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: var(--sr-r-xs);
+  background: var(--sr-pendiente-bg);
+  font: 700 13px var(--sr-fuente);
+  color: var(--sr-pendiente-fg);
 }
 
-.mat-symbol {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+.mesa-ocupada__aviso.is-preparacion {
+  background: var(--sr-preparacion-bg);
+  color: var(--sr-preparacion-fg);
 }
 
-.estado-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #9e9e9e;
+.mesa-ocupada__aviso.is-listo {
+  background: var(--sr-listo-bg);
+  color: var(--sr-listo-fg);
 }
 
-.estado-dot.is-ocupada {
-  background: #2e7d32;
+.mesa-ocupada__total {
+  margin-left: auto;
+  font-size: 17px;
+  color: var(--sr-verde-oscuro);
 }
 
-.mesa-action {
+.mesa-ocupada__entrar {
   width: 100%;
+  height: 68px;
+  font-size: 19px;
 }
 
-@media (min-width: 900px) {
-  .mesas-panel {
-    padding: 24px;
+// Mesa libre.
+.mesa-libre {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--sr-borde);
+  border-radius: var(--sr-r-xl);
+  background: var(--sr-blanco);
+}
+
+.mesa-libre__numero {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--sr-r-m);
+  background: var(--sr-pendiente-bg);
+  font-size: 30px;
+  color: var(--sr-texto-suave);
+}
+
+.mesa-libre__datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.mesa-libre__titulo {
+  font: 700 18px var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa-libre__capacidad {
+  margin-top: 4px;
+  font: 600 14px var(--sr-fuente);
+  color: var(--sr-texto-suave);
+}
+
+.mesa-libre__abrir {
+  flex: none;
+  height: 64px;
+  padding: 0 22px;
+  border-radius: var(--sr-r-s);
+}
+
+@media (max-width: 600px) {
+  .mesas__encabezado {
+    padding-inline: 16px;
+  }
+
+  .mesas__contenido {
+    padding: 18px 16px;
+  }
+
+  .mesas__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mesa-libre {
+    flex-wrap: wrap;
+  }
+
+  .mesa-libre__abrir {
+    width: 100%;
   }
 }

@@ -1,0 +1,19 @@
+// dvh en lugar de vh: en movil, vh no descuenta la barra de direcciones y
+// los pies fijos de las pantallas se salen del viewport.
+:host {
+  display: block;
+  height: 100dvh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// El toolbar ocupa lo que necesite y el resto es para la pantalla activa,
+// asi ninguna pantalla depende de saber cuanto mide la barra.
+.app__contenido {
+  flex: 1;
+  min-height: 0;
+}

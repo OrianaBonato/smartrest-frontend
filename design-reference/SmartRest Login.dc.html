@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#06200F;font-family:Figtree,system-ui,sans-serif}
+a{color:#185638}a:hover{color:#0E3A24}
+@keyframes srSplashBg{0%,69%{background-color:#06200F}100%{background-color:#185638}}
+@keyframes srPatternIn{0%,69%{opacity:0}100%{opacity:.2}}
+@keyframes srSplashOut{0%,84%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+@keyframes srIconIn{0%{opacity:0;transform:translateY(-420px) scale(.72,1.34)}34%{opacity:1;transform:translateY(0) scale(1.3,.7)}46%{transform:translateY(-150px) scale(.88,1.16)}60%{transform:translateY(0) scale(1.18,.84)}72%{transform:translateY(-56px) scale(.95,1.06)}84%{transform:translateY(0) scale(1.1,.92)}92%{transform:translateY(-16px) scale(.99,1.01)}100%{opacity:1;transform:translateY(0) scale(1,1)}}
+@keyframes srRing{0%{transform:scale(.35);opacity:.7}100%{transform:scale(2);opacity:0}}
+@keyframes srSweep{0%{opacity:0;transform:translateY(26px) scale(.7)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes srRise{0%{opacity:0}100%{opacity:1}}
+@keyframes srPop{0%{opacity:0;transform:scale(.9)}70%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+</style></helmet>
+
+<div style="position:relative;width:820px;height:1180px;background:#185638;overflow:hidden">
+<img src="assets/pattern-blanco.svg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.16">
+<div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,rgba(255,255,255,.10),transparent 60%)"></div>
+
+<div style="position:absolute;top:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:300 14px 'Space Grotesk',sans-serif;color:rgba(255,255,255,.75)">
+<span>21:15</span><span style="display:flex;gap:8px;align-items:center"><span style="width:26px;height:11px;border-radius:3px;border:1.5px solid rgba(255,255,255,.7);display:block"></span>82%</span>
+</div>
+
+<sc-if value="{{ mostrarLogin }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;inset:52px 0 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 90px">
+<div style="animation:srRise .9s ease-in-out 3.1s both">
+<img src="assets/logo-blanco.png" alt="SmartRest" style="width:230px;height:230px;object-fit:contain;display:block;margin:0 auto 34px">
+</div>
+<div style="width:100%;background:#fff;border-radius:34px;padding:52px 48px;box-shadow:0 30px 70px rgba(0,0,0,.28);transform-origin:center;animation:srPop .85s cubic-bezier(.2,.9,.3,1.1) 3.45s both">
+<div style="font:800 34px/1.1 Figtree,sans-serif;color:#0E3A24;letter-spacing:-.02em;text-align:center">Iniciar sesión</div>
+<div style="font:500 17px/1.5 Figtree,sans-serif;color:#5C6B60;margin-top:10px;text-align:center;text-wrap:pretty">Accede con tu cuenta de trabajo. Te llevamos a tu puesto.</div>
+
+<div style="display:grid;gap:22px;margin-top:34px">
+<label style="display:grid;gap:10px">
+<span style="font:300 13px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.06em">EMAIL</span>
+<input type="email" value="{{ email }}" onChange="{{ setEmail }}" style="height:76px;border-radius:20px;border:2px solid rgba(14,58,36,.16);background:#F7F9F5;padding:0 22px;font:600 19px Figtree,sans-serif;color:#121A15;outline:none;width:100%;box-sizing:border-box" style-focus="border-color:#185638;background:#fff">
+</label>
+<label style="display:grid;gap:10px">
+<span style="font:300 13px 'Space Grotesk',sans-serif;color:#185638;letter-spacing:.06em">PASSWORD</span>
+<div style="position:relative">
+<input type="{{ passType }}" value="{{ password }}" onChange="{{ setPassword }}" style="height:76px;border-radius:20px;border:2px solid rgba(14,58,36,.16);background:#F7F9F5;padding:0 108px 0 22px;font:600 19px Figtree,sans-serif;color:#121A15;outline:none;width:100%;box-sizing:border-box" style-focus="border-color:#185638;background:#fff">
+<button onClick="{{ togglePass }}" aria-label="Mostrar u ocultar contraseña" style="position:absolute;right:10px;top:10px;width:56px;height:56px;display:grid;place-items:center;border:0;background:transparent;padding:0;color:#5C6B60;cursor:pointer" style-hover="color:#185638">
+<sc-if value="{{ verPass }}" hint-placeholder-val="{{ false }}">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"></path><circle cx="12" cy="12" r="3.1"></circle></svg>
+</sc-if>
+<sc-if value="{{ noVerPass }}" hint-placeholder-val="{{ true }}">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5c1.9 2.6 5 4.8 9 4.8s7.1-2.2 9-4.8"></path><path d="m5 14.4-1.7 2.4"></path><path d="M9.4 16.6 8.7 19.4"></path><path d="m14.6 16.6.7 2.8"></path><path d="m19 14.4 1.7 2.4"></path></svg>
+</sc-if>
+</button>
+</div>
+</label>
+</div>
+
+<button onClick="{{ onLogin }}" style="width:100%;height:84px;margin-top:32px;border:0;border-radius:22px;background:#185638;color:#fff;font:800 22px Figtree,sans-serif;letter-spacing:-.01em;cursor:pointer;box-shadow:0 10px 24px rgba(24,86,56,.32)" style-hover="background:#0E3A24" style-active="transform:translateY(2px)">Entrar</button>
+
+<sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:20px;display:flex;align-items:center;gap:12px;background:#FDE7E6;border:1px solid rgba(186,26,26,.25);border-radius:16px;padding:18px 20px">
+<span style="width:10px;height:10px;border-radius:50%;background:#BA1A1A;flex:none"></span>
+<span style="font:600 16px Figtree,sans-serif;color:#8A1214">Login incorrecto</span>
+</div>
+</sc-if>
+
+<div style="margin-top:34px;padding-top:26px;border-top:1px solid rgba(14,58,36,.10)">
+<div style="font:300 12px 'Space Grotesk',sans-serif;color:#8A9990;letter-spacing:.06em;margin-bottom:14px;text-align:center">TU ROL DEFINE TU PANTALLA</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+<sc-for list="{{ roles }}" as="r" hint-placeholder-count="4">
+<button onClick="{{ r.select }}" style="padding:11px 18px;border:0;border-radius:999px;background:{{ r.bg }};font:700 14px Figtree,sans-serif;color:{{ r.fg }};cursor:pointer;box-shadow:0 2px 5px rgba(14,58,36,.14)" style-hover="box-shadow:0 4px 9px rgba(14,58,36,.20)" style-active="transform:translateY(1px);box-shadow:0 1px 3px rgba(14,58,36,.16)">{{ r.nombre }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ splash }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;inset:0;background:#06200F;display:grid;place-items:center;animation:srSplashOut 3.6s ease-in forwards,srSplashBg 3.6s ease-in-out forwards">
+<img src="assets/pattern-blanco.svg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:srPatternIn 3.6s ease-in-out forwards">
+<div style="position:relative;width:280px;height:347px">
+<div style="position:absolute;left:-10px;top:-10px;width:300px;height:300px;border-radius:50%;border:3px solid rgba(255,255,255,.55);animation:srRing 1.1s ease-out .44s both"></div>
+<div style="position:absolute;left:-10px;top:-10px;width:300px;height:300px;border-radius:50%;border:3px solid rgba(255,255,255,.3);animation:srRing 1.1s ease-out .72s both"></div>
+<img src="assets/icono-blanco.png" alt="" style="position:absolute;left:0;top:0;width:280px;height:280px;object-fit:contain;animation:srIconIn 1.4s cubic-bezier(.28,.9,.3,1) both">
+<img src="assets/marca-blanca.png" alt="SmartRest" style="position:absolute;left:40px;top:192px;width:154px;height:154px;object-fit:contain;transform-origin:34% 62%;animation:srSweep .7s cubic-bezier(.34,1.56,.64,1) 1.15s both">
+</div>
+</div>
+</sc-if>
+
+<button onClick="{{ replay }}" style="position:absolute;bottom:18px;right:18px;height:52px;padding:0 22px;border:0;border-radius:14px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);color:#fff;font:700 15px Figtree,sans-serif;cursor:pointer;z-index:5" style-hover="background:rgba(0,0,0,.75)">Repetir intro</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:820,&quot;height&quot;:1180},&quot;mostrarIntro&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intro&quot;},&quot;mostrarError&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Estados&quot;}}">
+class Component extends DCLogic {
+  state = { splash: true, email: 'sala@smartrest.es', password: 'smartrest', verPass: false, error: false };
+
+  replay = () => {
+    this.setState({ splash: false, mostrarLogin: false });
+    setTimeout(() => this.setState({ splash: true, mostrarLogin: true }), 60);
+  };
+
+  renderVals() {
+    const conIntro = this.props.mostrarIntro ?? true;
+    return {
+      splash: conIntro && this.state.splash,
+      mostrarLogin: this.state.mostrarLogin !== false,
+      replay: this.replay,
+      email: this.state.email,
+      password: this.state.password,
+      passType: this.state.verPass ? 'text' : 'password',
+      verPass: this.state.verPass,
+      noVerPass: !this.state.verPass,
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      setPassword: (e) => this.setState({ password: e.target.value }),
+      togglePass: () => this.setState((s) => ({ verPass: !s.verPass })),
+      roles: ['SALA', 'COCINA', 'BARRA', 'ADMIN'].map((nombre) => {
+        const on = (this.state.rol || 'SALA') === nombre;
+        return {
+          nombre,
+          bg: on ? '#E4F0E8' : '#F1F3EE',
+          fg: on ? '#185638' : '#5C6B60',
+          select: () => this.setState({ rol: nombre })
+        };
+      }),
+      loginError: this.props.mostrarError ?? this.state.error,
+      onLogin: () => this.setState((s) => ({ error: !s.email || !s.password }))
+    };
+  }
+}
+</script>
+</body>
+</html>

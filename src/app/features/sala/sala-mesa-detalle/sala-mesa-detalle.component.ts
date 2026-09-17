@@ -1,33 +1,20 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
 import { Mesa, MesaService } from '../../../services/mesa.service';
-import { ActivatedRoute } from '@angular/router';
 import { Producto, ProductoService } from '../../../services/producto.service';
-import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../core/auth/auth.service';
 import { ServicioResponse, ServicioService } from '../../../services/servicio.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatCardModule } from '@angular/material/card';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
 import { ComandaService, LineaComandaResponse } from '../../../services/comanda.service';
-import { catchError, finalize, forkJoin, of } from 'rxjs';
+
+import { LineaCuenta, SalaCuentaComponent } from '../sala-cuenta/sala-cuenta.component';
 
 @Component({
   selector: 'smartrest-sala-mesa-detalle',
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCardModule,
-    MatIconModule,
-    RouterLink,
-  ],
   standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SalaCuentaComponent],
   templateUrl: './sala-mesa-detalle.component.html',
   styleUrl: './sala-mesa-detalle.component.scss',
 })
@@ -36,8 +23,8 @@ export class SalaMesaDetalleComponent implements OnInit {
   // Datos base de mesa/servicio para el panel de comandaje
   mesa?: Mesa;
   idMesa?: number;
-  productos?: Producto[] = [];
-  servicioEstaAbierto: Boolean = false;
+  productos: Producto[] = [];
+  servicioEstaAbierto = false;
   servicioActual?: ServicioResponse;
 
   // Estado del flujo de pedido: carrito, pendientes y lineas para cuenta
@@ -49,6 +36,22 @@ export class SalaMesaDetalleComponent implements OnInit {
   formAbrir: FormGroup;
   loading = false;
   enviandoComandas = false;
+
+  // Apertura de mesa: opciones y atajos del diseno
+  readonly opcionesComensales = [1, 2, 3, 4, 5, 6, 7, 8];
+  readonly atajos = ['Alergia al gluten', 'Trona para bebé', 'Cumpleaños', 'Mesa juntada'];
+
+  // Comandero: categoria activa del catalogo
+  categorias: string[] = [];
+  categoriaActiva = '';
+
+  // Panel de cuenta
+  cuentaAbierta = false;
+
+  private readonly euro = new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+  });
 
   constructor(
     private mesaService: MesaService,
@@ -72,13 +75,103 @@ export class SalaMesaDetalleComponent implements OnInit {
       this.getMesa();
       this.productoService.listar().subscribe({
         next: (productosRes) => {
-          this.productos = productosRes;
+          this.productos = productosRes.filter((p) => p.activo !== false);
+          this.categorias = [...new Set(this.productos.map((p) => this.categoriaDe(p)))];
+          if (!this.categorias.includes(this.categoriaActiva)) {
+            this.categoriaActiva = this.categorias[0] ?? '';
+          }
           this.cdr.markForCheck();
         },
         error: (e) => console.error(e),
       });
     });
   }
+
+  // --- Datos derivados para la plantilla ---
+
+  // Numero de mesa a dos digitos, como en el diseno
+  get numeroMesa(): string {
+    return this.mesa ? String(this.mesa.numero).padStart(2, '0') : '--';
+  }
+
+  // Hora de apertura del servicio
+  get horaInicio(): string {
+    if (!this.servicioActual) return '';
+    const inicio = new Date(this.servicioActual.fechaInicio);
+    if (Number.isNaN(inicio.getTime())) return '';
+    return inicio.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Comensales elegidos en el formulario de apertura
+  get comensalesElegidos(): number | null {
+    return this.formAbrir.value.numeroComensales ?? null;
+  }
+
+  // Resumen del pie del formulario de apertura
+  get resumenApertura(): string {
+    const comensales = this.comensalesElegidos;
+    if (!comensales) return 'Sin comensales seleccionados';
+    const observaciones = (this.formAbrir.value.observaciones || '').trim();
+    return `${comensales} comensales${observaciones ? ' · con observaciones' : ''}`;
+  }
+
+  // Productos de la categoria seleccionada
+  get productosVisibles(): Producto[] {
+    return this.productos.filter((p) => this.categoriaDe(p) === this.categoriaActiva);
+  }
+
+  // Lineas que se cobran: todo lo del servicio menos lo cancelado
+  get cuentaLineas(): LineaCuenta[] {
+    return this.lineasServicio
+      .filter((l) => l.estado !== 'CANCELADO')
+      .map((l) => ({
+        idLinea: l.idLinea,
+        producto: l.productoNombre || `Producto #${l.idProducto}`,
+        cantidad: l.cantidad,
+        detalle: `${l.cantidad} × ${this.euro.format(Number(l.precioUnitario))}`,
+        subtotal: this.euro.format(Number(l.precioUnitario) * l.cantidad),
+      }));
+  }
+
+  // Total de la cuenta ya formateado
+  get totalFormateado(): string {
+    return this.euro.format(this.totalCuenta());
+  }
+
+  // Unidades en el carrito
+  get unidadesCarrito(): number {
+    return this.totalItems();
+  }
+
+  // --- Apertura de mesa ---
+
+  seleccionarComensales(numero: number) {
+    this.formAbrir.patchValue({ numeroComensales: numero });
+  }
+
+  // Anade un atajo al final de las observaciones
+  anadirAtajo(texto: string) {
+    const actual = (this.formAbrir.value.observaciones || '').trim();
+    this.formAbrir.patchValue({ observaciones: actual ? `${actual}. ${texto}` : texto });
+  }
+
+  // --- Comandero ---
+
+  seleccionarCategoria(categoria: string) {
+    this.categoriaActiva = categoria;
+  }
+
+  // --- Panel de cuenta ---
+
+  abrirCuenta() {
+    this.cuentaAbierta = true;
+  }
+
+  cerrarCuenta() {
+    this.cuentaAbierta = false;
+  }
+
+  // --- Carga de datos ---
 
   getMesa() {
     if (!this.idMesa) return;
@@ -103,20 +196,14 @@ export class SalaMesaDetalleComponent implements OnInit {
             },
             error: (e) => {
               if (this.idMesa !== mesaId) return;
-              this.servicioActual = undefined;
-              this.servicioEstaAbierto = false;
-              this.pendientes = [];
-              this.lineasServicio = [];
+              this.limpiarServicio();
               this.loading = false;
               console.error('Error cargando servicio de mesa', e);
               this.cdr.markForCheck();
             },
           });
         } else {
-          this.servicioActual = undefined;
-          this.servicioEstaAbierto = false;
-          this.pendientes = [];
-          this.lineasServicio = [];
+          this.limpiarServicio();
           this.loading = false;
           this.cdr.markForCheck();
         }
@@ -131,6 +218,7 @@ export class SalaMesaDetalleComponent implements OnInit {
   }
 
   abrirServicio() {
+    if (this.formAbrir.invalid) return;
     const user = this.auth.getAuth();
     const mesaID = this.idMesa!;
     const { numeroComensales, observaciones } = this.formAbrir.value;
@@ -163,11 +251,9 @@ export class SalaMesaDetalleComponent implements OnInit {
     const confirmado = window.confirm('El servicio esta pagado? Se cerrara la mesa.');
     if (!confirmado) return;
     this.servicioService.cerrarServicio(idServicio).subscribe({
-      next: (s) => {
-        this.servicioEstaAbierto = false;
-        this.servicioActual = undefined;
-        this.pendientes = [];
-        this.lineasServicio = [];
+      next: () => {
+        this.cuentaAbierta = false;
+        this.limpiarServicio();
         this.getMesa();
         this.cdr.markForCheck();
       },
@@ -193,18 +279,6 @@ export class SalaMesaDetalleComponent implements OnInit {
     }
   }
 
-  actualizarCantidad(producto: Producto, valor: string) {
-    const cantidad = Number(valor);
-    if (!Number.isFinite(cantidad)) return;
-    const item = this.carrito.find((i) => i.producto.idProducto === producto.idProducto);
-    if (!item) return;
-    if (cantidad <= 0) {
-      this.carrito = this.carrito.filter((i) => i.producto.idProducto !== producto.idProducto);
-      return;
-    }
-    item.cantidad = Math.floor(cantidad);
-  }
-
   enviarComandas() {
     if (!this.servicioActual) {
       console.warn('No hay servicioActual para enviar comandas');
@@ -221,7 +295,6 @@ export class SalaMesaDetalleComponent implements OnInit {
       return;
     }
     const carritoSnapshot = [...this.carrito];
-    if (carritoSnapshot.length === 0) return;
     const reqs = carritoSnapshot.map((item) =>
       this.comandaService.crearLinea({
         idServicio: this.servicioActual!.idServicio,
@@ -249,12 +322,10 @@ export class SalaMesaDetalleComponent implements OnInit {
         }),
       )
       .subscribe((resultados) => {
-        const fallidos = resultados
+        // Solo se quedan en el carrito las lineas que no se pudieron crear
+        this.carrito = resultados
           .map((res, idx) => (res ? null : carritoSnapshot[idx]))
-          .filter(
-            (item): item is { producto: Producto; cantidad: number } => item !== null,
-          );
-        this.carrito = fallidos;
+          .filter((item): item is { producto: Producto; cantidad: number } => item !== null);
         this.cargarPendientes();
         this.cargarLineas();
         this.cdr.markForCheck();
@@ -309,8 +380,29 @@ export class SalaMesaDetalleComponent implements OnInit {
     });
   }
 
-  // Total calculado en cliente para MVP
+  // Total calculado en cliente, sin contar lo cancelado
   totalCuenta(): number {
-    return this.lineasServicio.reduce((acc, l) => acc + Number(l.precioUnitario) * l.cantidad, 0);
+    return this.lineasServicio
+      .filter((l) => l.estado !== 'CANCELADO')
+      .reduce((acc, l) => acc + Number(l.precioUnitario) * l.cantidad, 0);
+  }
+
+  // Precio de un producto ya formateado
+  precio(producto: Producto): string {
+    return this.euro.format(Number(producto.precio));
+  }
+
+  // Deja la mesa sin servicio abierto
+  private limpiarServicio() {
+    this.servicioActual = undefined;
+    this.servicioEstaAbierto = false;
+    this.pendientes = [];
+    this.lineasServicio = [];
+    this.carrito = [];
+  }
+
+  // Categoria del producto, con cajon de sastre para los que no la traen
+  private categoriaDe(producto: Producto): string {
+    return producto.nombreCategoria?.trim() || 'Otros';
   }
 }

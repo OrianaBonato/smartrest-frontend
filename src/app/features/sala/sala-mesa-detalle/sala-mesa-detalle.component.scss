@@ -1,323 +1,617 @@
-.panel {
-  display: grid;
-  gap: 16px;
-  padding: 12px;
-  background: #f5f6f8;
+:host {
+  display: block;
+  height: 100%;
 }
 
-.panel-top {
+.mesa {
+  position: relative;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--sr-fondo);
 }
 
-.back-btn {
-  gap: 6px;
+.mesa__volver {
+  flex: none;
+  padding: 18px 24px 0;
 }
 
-.summary-card {
-  padding: 0rem 1rem;
-  background: #ffffff;
-  border: 1px solid #d9d9d9;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+.mesa__volver-btn {
+  height: 56px;
+  padding: 0 22px;
 }
 
-.summary-header {
+// Ficha de mesa y servicio.
+.mesa__ficha {
+  flex: none;
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
   align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  margin-top: 18px;
+  border-top: 1px solid var(--sr-borde);
+  border-bottom: 1px solid var(--sr-borde);
+  background: var(--sr-blanco);
+}
+
+.mesa__ficha-numero {
+  flex: none;
+  width: 78px;
+  height: 78px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--sr-r-l);
+  background: var(--sr-pendiente-bg);
+  font-size: 32px;
+  color: var(--sr-texto-suave);
+}
+
+.mesa__ficha-numero.is-abierto {
+  background: var(--sr-verde);
+  color: var(--sr-blanco);
+}
+
+.mesa__ficha-datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.mesa__ficha-titulo {
+  margin: 0;
+  font: 800 28px/1.1 var(--sr-fuente);
+  letter-spacing: -0.02em;
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__ficha-meta {
+  margin: 6px 0 0;
+  font: 600 15px var(--sr-fuente);
+  color: var(--sr-texto-suave);
+}
+
+.mesa__ficha-chip {
+  flex: none;
+  padding: 12px 18px;
+  border-radius: var(--sr-r-pill);
+  background: var(--sr-verde-suave);
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: var(--sr-verde);
+}
+
+.mesa__observaciones {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   flex-wrap: wrap;
+  margin: 16px 24px 0;
+  padding: 14px 18px;
+  border-radius: var(--sr-r-s);
+  background: var(--sr-preparacion-bg);
 }
 
-.summary-title {
-  display: grid;
-  gap: 2px;
+.mesa__observaciones-etiqueta {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--sr-ambar);
 }
 
-.mesa-title {
-  font-size: 1.2rem;
-  font-weight: 700;
+.mesa__observaciones-texto {
+  font: 600 16px var(--sr-fuente);
+  color: #7a4b06;
 }
 
-.mesa-meta {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.mesa-estado-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.estado-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
-}
-
-.mat-symbol {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-}
-
-.summary-chip {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #eee;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.summary-chip.is-open {
-  background: #e5f4ea;
-  color: #1f6f43;
-}
-
-.summary-grid {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  margin-top: 12px;
-}
-
-.summary-item {
-  display: grid;
-  gap: 2px;
-  padding: 8px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-}
-
-.summary-wide {
-  grid-column: 1 / -1;
-}
-
-.summary-label {
-  font-weight: 600;
-  color: #444;
-  font-size: 0.85rem;
-}
-
-.info-card {
-  padding: 2rem;
-  background: #ffffff;
-  border: 1px solid #d9d9d9;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.info-empty {
-  color: #666;
-  padding: 8px 0;
-}
-
-.panel-note {
-  margin: 8px 0;
-}
-
-.form-servicio {
-  display: grid;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.card-actions {
+// Zona desplazable comun a los dos modos.
+.mesa__abrir {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
-.workspace {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    "products"
-    "cart"
-    "pending"
-    "bill";
-}
-
-.products-card {
-  grid-area: products;
-}
-
-.cart-card {
-  grid-area: cart;
-}
-
-.pending-card {
-  grid-area: pending;
-}
-
-.bill-card {
-  grid-area: bill;
-  position: sticky;
-  top: 12px;
-  align-self: start;
-  max-height: 60vh;
+.mesa__contenido {
+  flex: 1;
   overflow: auto;
+  padding: 26px 24px;
 }
 
-@media (min-width: 900px) {
-  .workspace {
-    grid-template-columns: 2fr 1fr;
-    grid-template-areas:
-      "products cart"
-      "products pending"
-      "products bill";
-  }
-
-  .bill-card {
-    max-height: 70vh;
-  }
+// Apertura de mesa.
+.mesa__paso {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
-.productos-grid {
-  margin-top: 1rem;
+.mesa__paso--segundo {
+  margin-top: 34px;
+}
+
+.mesa__paso-numero {
+  flex: none;
+  width: 34px;
+  height: 34px;
   display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  place-items: center;
+  border-radius: 50%;
+  background: #e3e7e1;
+  font-size: 16px;
+  color: var(--sr-texto-tenue);
 }
 
-.producto-item-btn {
+.mesa__paso-numero.is-activo {
+  background: var(--sr-verde);
+  color: var(--sr-blanco);
+}
+
+.mesa__paso-titulo {
+  font: 800 22px var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__paso-titulo.is-inactivo {
+  color: var(--sr-texto-tenue);
+}
+
+.mesa__paso-opcional {
+  font: 600 14px var(--sr-fuente);
+  color: var(--sr-texto-tenue);
+}
+
+.mesa__comensales {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.mesa__comensal {
+  height: 104px;
+  border: 2px solid var(--sr-borde);
+  border-radius: var(--sr-r-l);
+  background: var(--sr-blanco);
+  font-size: 34px;
+  color: var(--sr-verde-oscuro);
+  cursor: pointer;
+}
+
+.mesa__comensal.is-activo {
+  border-color: var(--sr-verde);
+  background: var(--sr-verde);
+  color: var(--sr-blanco);
+  box-shadow: var(--sr-sombra-accion);
+}
+
+.mesa__textarea {
+  box-sizing: border-box;
   width: 100%;
-  justify-content: flex-start;
-  text-align: left;
-  padding: 12px 14px;
-  border-radius: 8px;
-  min-height: 64px;
+  min-height: 150px;
+  padding: 20px 22px;
+  border: 2px solid var(--sr-borde-medio);
+  border-radius: var(--sr-r-l);
+  background: var(--sr-blanco);
+  font: 500 18px/1.5 var(--sr-fuente);
+  color: var(--sr-texto);
+  resize: none;
+  outline: none;
 }
 
-.producto-info {
+.mesa__textarea:focus {
+  border-color: var(--sr-verde);
+}
+
+.mesa__atajos {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.producto-nombre {
-  font-weight: 600;
-  font-size: 1.05rem;
-}
-
-.producto-precio {
-  color: #000000;
-  font-size: 0.95rem;
-  opacity: 1;
-}
-
-.carrito-lista {
-  display: grid;
-  gap: 12px;
-}
-
-.carrito-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 10px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-}
-
-.carrito-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.carrito-controles {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cantidad-input {
-  width: 64px;
-  padding: 6px 8px;
-  border: 1px solid #cfcfcf;
-  border-radius: 6px;
-  text-align: center;
-}
-
-.carrito-resumen {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
-  font-weight: 600;
-}
-
-.pendientes-lista {
-  display: grid;
-  gap: 10px;
-}
-
-.pendiente-item {
-  display: grid;
-  gap: 4px;
-  border-bottom: 1px solid #e5e5e5;
-  padding-bottom: 8px;
-}
-
-.pendiente-item:last-child {
-  border-bottom: none;
-}
-
-.pendiente-nombre {
-  font-weight: 600;
-}
-
-.pendiente-meta {
-  display: flex;
-  gap: 8px;
   flex-wrap: wrap;
-  color: #555;
-  font-size: 0.85rem;
+  gap: 10px;
+  margin-top: 14px;
 }
 
-.pendiente-estado {
-  font-weight: 600;
+.mesa__atajo {
+  height: 56px;
+  padding: 0 20px;
+  border: 2px solid var(--sr-borde);
+  border-radius: var(--sr-r-pill);
+  background: var(--sr-blanco);
+  font: 700 15px var(--sr-fuente);
+  color: var(--sr-verde);
+  cursor: pointer;
 }
 
-.cuenta-lista {
+.mesa__atajo:hover {
+  border-color: var(--sr-verde);
+  background: var(--sr-verde-suave);
+}
+
+// Pie fijo.
+.mesa__pie {
+  flex: none;
+  padding: 18px 24px 22px;
+  border-top: 1px solid var(--sr-borde);
+  background: var(--sr-blanco);
+  box-shadow: var(--sr-sombra-barra);
+}
+
+.mesa__pie-resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mesa__pie-etiqueta {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--sr-texto-tenue);
+}
+
+.mesa__pie-texto {
+  font: 600 16px var(--sr-fuente);
+  color: var(--sr-texto-suave);
+}
+
+.mesa__continuar {
+  width: 100%;
+  height: 88px;
+  font-size: 23px;
+  border-radius: var(--sr-r-xl);
+}
+
+// Comandero.
+.mesa__categorias {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  padding: 20px 24px 0;
+  overflow-x: auto;
+}
+
+.mesa__categoria {
+  height: 72px;
+  min-width: 130px;
+}
+
+.mesa__productos {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.mesa__producto {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 120px;
+  padding: 20px;
+  border: 1px solid var(--sr-borde);
+  border-radius: var(--sr-r-l);
+  background: var(--sr-blanco);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mesa__producto:hover {
+  border-color: var(--sr-verde);
+  box-shadow: var(--sr-sombra-card);
+}
+
+.mesa__producto:active {
+  transform: scale(0.98);
+}
+
+.mesa__producto-nombre {
+  font: 700 19px/1.3 var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__producto-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
-.cuenta-item {
-  border-bottom: 1px solid #e5e5e5;
-  padding-bottom: 8px;
+.mesa__producto-precio {
+  font-size: 20px;
+  color: var(--sr-verde);
 }
 
-.cuenta-item:last-child {
-  border-bottom: none;
-}
-
-.cuenta-nombre {
-  font-weight: 600;
-}
-
-.cuenta-detalle {
+.mesa__producto-destino {
   display: flex;
-  justify-content: space-between;
-  color: #555;
+  align-items: center;
+  gap: 10px;
+}
+
+.mesa__producto-etiqueta {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--sr-texto-tenue);
+}
+
+.mesa__producto-mas {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--sr-r-s);
+  background: var(--sr-verde-suave);
+  font: 700 24px var(--sr-fuente);
+  color: var(--sr-verde);
+}
+
+.mesa__pendientes {
+  margin-top: 26px;
+}
+
+.mesa__pendientes-lista {
+  display: grid;
+  gap: 12px;
+}
+
+.mesa__pendiente {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--sr-borde);
+  border-radius: var(--sr-r-m);
+  background: var(--sr-blanco);
+}
+
+.mesa__pendiente-cantidad {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--sr-r-s);
+  background: var(--sr-pendiente-bg);
+  font-size: 18px;
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__pendiente-datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.mesa__pendiente-nombre {
+  font: 700 18px var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__pendiente-meta {
   margin-top: 4px;
+  font-size: 13px;
+  color: var(--sr-texto-tenue);
 }
 
-.cuenta-subtotal {
-  font-weight: 600;
+// Barra de cuenta y carrito.
+.mesa__cuenta-barra {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 14px 22px 18px;
+  border: 0;
+  border-radius: var(--sr-r-m);
+  background: var(--sr-verde-oscuro);
+  cursor: pointer;
+  text-align: left;
 }
 
-.cuenta-total {
+.mesa__cuenta-barra:hover {
+  background: var(--sr-verde);
+}
+
+.mesa__cuenta-asa {
+  display: block;
+  width: 64px;
+  height: 5px;
+  margin: 0 auto 12px;
+  border-radius: var(--sr-r-pill);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.mesa__cuenta-linea {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 2px solid #ddd;
-  font-weight: 700;
+  gap: 12px;
 }
 
-mat-card-content{
-  margin-top: 1rem ;
+.mesa__cuenta-textos {
+  display: block;
 }
+
+.mesa__cuenta-etiqueta {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.mesa__cuenta-detalle {
+  display: block;
+  margin-top: 5px;
+  font: 600 15px var(--sr-fuente);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mesa__cuenta-total {
+  font-size: 26px;
+  color: var(--sr-blanco);
+}
+
+.mesa__carrito-vacio {
+  display: flex;
+  align-items: center;
+  height: 76px;
+  padding: 0 22px;
+  border-radius: var(--sr-r-m);
+  background: var(--sr-pendiente-bg);
+  font: 600 17px var(--sr-fuente);
+  color: var(--sr-texto-suave);
+}
+
+.mesa__carrito {
+  display: grid;
+  gap: 10px;
+  max-height: 214px;
+  overflow: auto;
+  margin-bottom: 16px;
+}
+
+.mesa__carrito-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: var(--sr-r-m);
+  background: var(--sr-fondo);
+}
+
+.mesa__carrito-datos {
+  flex: 1;
+  min-width: 0;
+}
+
+.mesa__carrito-nombre {
+  font: 700 18px var(--sr-fuente);
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__carrito-precio {
+  margin-top: 3px;
+  font-size: 14px;
+  color: var(--sr-texto-tenue);
+}
+
+.mesa__paso-btn {
+  flex: none;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  font-size: 26px;
+  border-radius: var(--sr-r-s);
+  box-shadow: none;
+}
+
+.mesa__carrito-cantidad {
+  min-width: 44px;
+  text-align: center;
+  font-size: 24px;
+  color: var(--sr-verde-oscuro);
+}
+
+.mesa__enviar {
+  width: 100%;
+  height: 86px;
+  font-size: 22px;
+  border-radius: var(--sr-r-l);
+}
+
+.mesa__enviar-contador {
+  padding: 8px 16px;
+  border-radius: var(--sr-r-pill);
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 18px;
+}
+
+@media (max-width: 600px) {
+  .mesa__volver,
+  .mesa__ficha,
+  .mesa__categorias,
+  .mesa__contenido,
+  .mesa__pie {
+    padding-inline: 16px;
+  }
+
+  // La cabecera de la mesa es contexto, no accion: en movil se comprime al
+  // maximo para dejar el alto al catalogo y a la barra de cuenta.
+  .mesa__volver {
+    padding-top: 12px;
+  }
+
+  .mesa__volver-btn {
+    height: 44px;
+    padding: 0 16px;
+    font-size: 15px;
+  }
+
+  .mesa__ficha {
+    gap: 12px;
+    padding-block: 12px;
+    margin-top: 10px;
+  }
+
+  .mesa__ficha-numero {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--sr-r-s);
+    font-size: 20px;
+  }
+
+  .mesa__ficha-titulo {
+    font-size: 17px;
+  }
+
+  .mesa__ficha-meta {
+    margin-top: 2px;
+    font-size: 12px;
+  }
+
+  .mesa__ficha-chip {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .mesa__observaciones {
+    gap: 8px;
+    margin: 10px 16px 0;
+    padding: 8px 12px;
+  }
+
+  .mesa__observaciones-etiqueta {
+    font-size: 10px;
+  }
+
+  .mesa__observaciones-texto {
+    font-size: 13px;
+  }
+
+  // Pestanas de categoria mas bajas: el componente las fija a 72px y eso
+  // pisaba la reduccion que .sr-tab ya hace en movil.
+  .mesa__categorias {
+    padding-top: 14px;
+  }
+
+  .mesa__categoria {
+    height: 56px;
+    min-width: 104px;
+  }
+
+  .mesa__comensales {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .mesa__comensal {
+    height: 76px;
+    font-size: 26px;
+  }
+
+  .mesa__productos {
+    grid-template-columns: 1fr;
+  }
+
+  .mesa__continuar,
+  .mesa__enviar {
+    height: 72px;
+    font-size: 19px;
+  }
+}
+
